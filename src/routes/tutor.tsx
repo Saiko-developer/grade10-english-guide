@@ -271,7 +271,25 @@ Break it down step by step:
               placeholder="Ask about a sentence, grammar rule, or English word…"
               autoFocus
             />
-            <PromptInputFooter className="justify-end">
+            <PromptInputFooter className="justify-between">
+              <div className="flex items-center gap-2">
+                {recognition.supported && (
+                  <Button
+                    type="button"
+                    variant={recognition.listening ? "default" : "outline"}
+                    size="icon-sm"
+                    onClick={toggleMic}
+                    aria-pressed={recognition.listening}
+                    title={recognition.listening ? "Stop listening" : "Speak your question"}
+                    className={recognition.listening ? "animate-pulse" : ""}
+                  >
+                    {recognition.listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  </Button>
+                )}
+                {recognition.listening && (
+                  <span className="text-xs text-muted-foreground">Listening…</span>
+                )}
+              </div>
               <PromptInputSubmit status={status} disabled={isLoading} />
             </PromptInputFooter>
           </PromptInput>
