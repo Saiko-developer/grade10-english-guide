@@ -165,7 +165,10 @@ Break it down step by step:
   const showThinking = status === "submitted" || (status === "streaming" && lastMessage?.role !== "assistant");
   const toggleVoiceMode = () => {
     setVoiceMode((v) => {
-      if (v) stopSpeaking();
+      if (v) {
+        stopSpeaking();
+        lessonExplanationRef.current = false;
+      }
       return !v;
     });
   };
