@@ -119,7 +119,12 @@ function Index() {
     const text = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
     if (!text) return;
     spokenIdRef.current = last.id;
-    speak(text);
+    // For lesson explanations, speak only Burmese; otherwise speak both languages
+    if (lessonExplanationRef.current) {
+      speak(text, { lang: "my-MM" });
+    } else {
+      speak(text);
+    }
   }, [voiceMode, ttsSupported, status, messages, speak]);
 
   // Auto-send an explanation request when a lesson is selected from /lessons
