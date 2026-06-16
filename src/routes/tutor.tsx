@@ -128,6 +128,7 @@ function Index() {
     if (autoSentRef.current === lesson) return;
     if (messages.length > 0) return;
     autoSentRef.current = lesson;
+    setVoiceMode(true); // auto-enable voice when arriving from a lesson
     const prompt = `Please explain the lesson "${lesson}"${category ? ` (${category})` : ""} for a Grade 10 student in Myanmar.
 
 Break it down step by step:
