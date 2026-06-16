@@ -25,7 +25,13 @@ import {
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 
+type TutorSearch = { lesson?: string; category?: string };
+
 export const Route = createFileRoute("/tutor")({
+  validateSearch: (search: Record<string, unknown>): TutorSearch => ({
+    lesson: typeof search.lesson === "string" ? search.lesson : undefined,
+    category: typeof search.category === "string" ? search.category : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sayar Owl — English Tutor for Grade 10 Myanmar Students" },
