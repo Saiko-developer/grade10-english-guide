@@ -154,7 +154,7 @@ function Index() {
                       {m.role === "user" ? (
                         <MessageContent>{text}</MessageContent>
                       ) : (
-                        <MessageContent variant="flat" className="px-0">
+                        <MessageContent className="bg-transparent px-0 py-0">
                           <MessageResponse>{text}</MessageResponse>
                         </MessageContent>
                       )}
@@ -163,7 +163,7 @@ function Index() {
                 })}
                 {showThinking && (
                   <Message from="assistant">
-                    <MessageContent variant="flat" className="px-0">
+                    <MessageContent className="bg-transparent px-0 py-0">
                       <Shimmer>Sayar Owl is thinking…</Shimmer>
                     </MessageContent>
                   </Message>
