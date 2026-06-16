@@ -79,10 +79,47 @@ function Index() {
     onError: (err) => console.error("[chat]", err),
   });
 
+  const [voiceMode, setVoiceMode] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
     if (status === "ready") textareaRef.current?.focus();
   }, [status]);
+
+  const { speak, stop: stopSpeaking, speaking, supported: ttsSupported } = useSpeechSynthesis();
+
+  const recognition = useSpeechRecognition({
+    lang: "en-US",
+    onFinal: (text) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      void sendMessage({ text: trimmed });
+    },
+    onInterim: (text) => {
+      if (textareaRef.current) textareaRef.current.value = text;
+    },
+  });
+
+  const toggleMic = () => {
+    if (recognition.listening) recognition.stop();
+    else {
+      stopSpeaking();
+      recognition.start();
+    }
+  };
+
+  // Auto-speak the assistant's reply when voice mode is on and streaming finishes
+  const spokenIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!voiceMode || !ttsSupported) return;
+    if (status !== "ready") return;
+    const last = messages[messages.length - 1];
+    if (!last || last.role !== "assistant") return;
+    if (spokenIdRef.current === last.id) return;
+    const text = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
+    if (!text) return;
+    spokenIdRef.current = last.id;
+    speak(text);
+  }, [voiceMode, ttsSupported, status, messages, speak]);
 
   // Auto-send an explanation request when a lesson is selected from /lessons
   const autoSentRef = useRef<string | null>(null);
@@ -116,6 +153,12 @@ Break it down step by step:
   const isLoading = status === "submitted" || status === "streaming";
   const lastMessage = messages[messages.length - 1];
   const showThinking = status === "submitted" || (status === "streaming" && lastMessage?.role !== "assistant");
+  const toggleVoiceMode = () => {
+    setVoiceMode((v) => {
+      if (v) stopSpeaking();
+      return !v;
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-[oklch(0.985_0.01_95)]">
