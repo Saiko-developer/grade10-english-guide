@@ -135,6 +135,7 @@ function Index() {
     if (messages.length > 0) return;
     autoSentRef.current = lesson;
     setVoiceMode(true); // auto-enable voice when arriving from a lesson
+    lessonExplanationRef.current = true; // mark as lesson explanation so only Burmese is spoken
     const prompt = `Please explain the lesson "${lesson}"${category ? ` (${category})` : ""} for a Grade 10 student in Myanmar.
 
 Break it down step by step:
