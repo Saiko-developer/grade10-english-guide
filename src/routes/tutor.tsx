@@ -25,7 +25,7 @@ import {
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/tutor")({
   head: () => ({
     meta: [
       { title: "Sayar Owl — English Tutor for Grade 10 Myanmar Students" },
