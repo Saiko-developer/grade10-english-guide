@@ -150,11 +150,13 @@ Break it down step by step:
   const handleSubmit = (message: PromptInputMessage) => {
     const text = message.text?.trim();
     if (!text || status === "submitted" || status === "streaming") return;
+    lessonExplanationRef.current = false;
     void sendMessage({ text });
   };
 
   const handleStarter = (prompt: string) => {
     if (status === "submitted" || status === "streaming") return;
+    lessonExplanationRef.current = false;
     void sendMessage({ text: prompt });
   };
 
