@@ -70,6 +70,7 @@ const STARTERS = [
 ];
 
 function Index() {
+  const { lesson, category } = Route.useSearch();
   const [transport] = useState(() => new DefaultChatTransport({ api: "/api/chat" }));
   const { messages, sendMessage, status } = useChat({
     transport,
@@ -80,6 +81,24 @@ function Index() {
   useEffect(() => {
     if (status === "ready") textareaRef.current?.focus();
   }, [status]);
+
+  // Auto-send an explanation request when a lesson is selected from /lessons
+  const autoSentRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!lesson) return;
+    if (autoSentRef.current === lesson) return;
+    if (messages.length > 0) return;
+    autoSentRef.current = lesson;
+    const prompt = `Please explain the lesson "${lesson}"${category ? ` (${category})` : ""} for a Grade 10 student in Myanmar.
+
+Break it down step by step:
+1. Simple explanation of the rule (the "why").
+2. Sentence structure / pattern.
+3. 2–3 clear example sentences.
+4. Myanmar translation for the key idea and one example.
+5. End with a short practice question I can try.`;
+    void sendMessage({ text: prompt });
+  }, [lesson, category, messages.length, sendMessage]);
 
   const handleSubmit = (message: PromptInputMessage) => {
     const text = message.text?.trim();
