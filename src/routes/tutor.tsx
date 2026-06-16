@@ -177,6 +177,26 @@ Break it down step by step:
               English tutor for Grade 10 students in Myanmar
             </p>
           </div>
+          {ttsSupported && (
+            <Button
+              type="button"
+              variant={voiceMode ? "default" : "outline"}
+              size="sm"
+              onClick={toggleVoiceMode}
+              aria-pressed={voiceMode}
+              title={voiceMode ? "Voice mode on — replies read aloud" : "Turn on voice mode"}
+            >
+              {voiceMode ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              <span className="ml-1.5 hidden sm:inline">
+                {voiceMode ? "Voice on" : "Voice"}
+              </span>
+            </Button>
+          )}
+          {speaking && (
+            <Button type="button" variant="ghost" size="sm" onClick={stopSpeaking} title="Stop speaking">
+              <VolumeX className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </header>
 
