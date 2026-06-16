@@ -80,6 +80,7 @@ function Index() {
   });
 
   const [voiceMode, setVoiceMode] = useState(false);
+  const lessonExplanationRef = useRef(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
     if (status === "ready") textareaRef.current?.focus();
