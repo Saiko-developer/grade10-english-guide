@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Languages, Lightbulb } from "lucide-react";
+import { BookOpen, Languages, Lightbulb, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 
 import tutorLogo from "@/assets/tutor-logo.png";
 import {
@@ -24,6 +24,8 @@ import {
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { Button } from "@/components/ui/button";
+import { useSpeechRecognition, useSpeechSynthesis } from "@/hooks/use-voice";
 
 type TutorSearch = { lesson?: string; category?: string };
 
