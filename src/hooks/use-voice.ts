@@ -108,22 +108,45 @@ export function useSpeechSynthesis() {
     setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
   }, []);
 
-  const speak = useCallback((text: string, lang = "en-US") => {
+  const speak = useCallback((text: string) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    // Strip markdown-ish characters for cleaner speech
     const clean = text
       .replace(/```[\s\S]*?```/g, "")
       .replace(/[*_`#>]/g, "")
       .replace(/\[(.*?)\]\(.*?\)/g, "$1");
-    const utter = new SpeechSynthesisUtterance(clean);
-    utter.lang = lang;
-    utter.rate = 0.95;
-    utter.pitch = 1;
-    utter.onstart = () => setSpeaking(true);
-    utter.onend = () => setSpeaking(false);
-    utter.onerror = () => setSpeaking(false);
-    window.speechSynthesis.speak(utter);
+
+    // Split into Burmese vs non-Burmese runs so each speaks in the right voice.
+    const BURMESE = /[\u1000-\u109F\uAA60-\uAA7F\uA9E0-\uA9FF]/;
+    const segments: { text: string; lang: string }[] = [];
+    let buf = "";
+    let bufLang: string | null = null;
+    for (const ch of clean) {
+      const lang = BURMESE.test(ch) ? "my-MM" : "en-US";
+      if (bufLang === null) bufLang = lang;
+      if (lang !== bufLang) {
+        if (buf.trim()) segments.push({ text: buf, lang: bufLang });
+        buf = ch;
+        bufLang = lang;
+      } else {
+        buf += ch;
+      }
+    }
+    if (buf.trim() && bufLang) segments.push({ text: buf, lang: bufLang });
+    if (segments.length === 0) return;
+
+    setSpeaking(true);
+    segments.forEach((seg, i) => {
+      const utter = new SpeechSynthesisUtterance(seg.text);
+      utter.lang = seg.lang;
+      utter.rate = 0.95;
+      utter.pitch = 1;
+      if (i === segments.length - 1) {
+        utter.onend = () => setSpeaking(false);
+        utter.onerror = () => setSpeaking(false);
+      }
+      window.speechSynthesis.speak(utter);
+    });
   }, []);
 
   const stop = useCallback(() => {
