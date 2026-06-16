@@ -108,7 +108,7 @@ export function useSpeechSynthesis() {
     setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
   }, []);
 
-  const speak = useCallback((text: string) => {
+  const speak = useCallback((text: string, opts?: { lang?: string }) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const clean = text
@@ -135,13 +135,18 @@ export function useSpeechSynthesis() {
     if (buf.trim() && bufLang) segments.push({ text: buf, lang: bufLang });
     if (segments.length === 0) return;
 
+    const filtered = opts?.lang
+      ? segments.filter((s) => s.lang === opts.lang)
+      : segments;
+    if (filtered.length === 0) return;
+
     setSpeaking(true);
-    segments.forEach((seg, i) => {
+    filtered.forEach((seg, i) => {
       const utter = new SpeechSynthesisUtterance(seg.text);
       utter.lang = seg.lang;
       utter.rate = 0.95;
       utter.pitch = 1;
-      if (i === segments.length - 1) {
+      if (i === filtered.length - 1) {
         utter.onend = () => setSpeaking(false);
         utter.onerror = () => setSpeaking(false);
       }

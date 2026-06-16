@@ -80,6 +80,7 @@ function Index() {
   });
 
   const [voiceMode, setVoiceMode] = useState(false);
+  const lessonExplanationRef = useRef(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
     if (status === "ready") textareaRef.current?.focus();
@@ -118,7 +119,12 @@ function Index() {
     const text = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
     if (!text) return;
     spokenIdRef.current = last.id;
-    speak(text);
+    // For lesson explanations, speak only Burmese; otherwise speak both languages
+    if (lessonExplanationRef.current) {
+      speak(text, { lang: "my-MM" });
+    } else {
+      speak(text);
+    }
   }, [voiceMode, ttsSupported, status, messages, speak]);
 
   // Auto-send an explanation request when a lesson is selected from /lessons
@@ -129,6 +135,7 @@ function Index() {
     if (messages.length > 0) return;
     autoSentRef.current = lesson;
     setVoiceMode(true); // auto-enable voice when arriving from a lesson
+    lessonExplanationRef.current = true; // mark as lesson explanation so only Burmese is spoken
     const prompt = `Please explain the lesson "${lesson}"${category ? ` (${category})` : ""} for a Grade 10 student in Myanmar.
 
 Break it down step by step:
@@ -143,11 +150,13 @@ Break it down step by step:
   const handleSubmit = (message: PromptInputMessage) => {
     const text = message.text?.trim();
     if (!text || status === "submitted" || status === "streaming") return;
+    lessonExplanationRef.current = false;
     void sendMessage({ text });
   };
 
   const handleStarter = (prompt: string) => {
     if (status === "submitted" || status === "streaming") return;
+    lessonExplanationRef.current = false;
     void sendMessage({ text: prompt });
   };
 
@@ -156,7 +165,10 @@ Break it down step by step:
   const showThinking = status === "submitted" || (status === "streaming" && lastMessage?.role !== "assistant");
   const toggleVoiceMode = () => {
     setVoiceMode((v) => {
-      if (v) stopSpeaking();
+      if (v) {
+        stopSpeaking();
+        lessonExplanationRef.current = false;
+      }
       return !v;
     });
   };
@@ -189,7 +201,7 @@ Break it down step by step:
               !ttsSupported
                 ? "Voice not supported in this browser"
                 : voiceMode
-                  ? "Voice mode on — replies read aloud (English + Burmese)"
+                  ? "Voice on — replies read aloud (Burmese-only for lesson explanations)"
                   : "Turn on voice mode"
             }
           >
