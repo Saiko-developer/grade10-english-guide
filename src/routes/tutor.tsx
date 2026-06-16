@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Languages, Lightbulb } from "lucide-react";
+import { BookOpen, Languages, Lightbulb, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 
 import tutorLogo from "@/assets/tutor-logo.png";
 import {
@@ -24,6 +24,8 @@ import {
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { Button } from "@/components/ui/button";
+import { useSpeechRecognition, useSpeechSynthesis } from "@/hooks/use-voice";
 
 type TutorSearch = { lesson?: string; category?: string };
 
@@ -77,10 +79,47 @@ function Index() {
     onError: (err) => console.error("[chat]", err),
   });
 
+  const [voiceMode, setVoiceMode] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
     if (status === "ready") textareaRef.current?.focus();
   }, [status]);
+
+  const { speak, stop: stopSpeaking, speaking, supported: ttsSupported } = useSpeechSynthesis();
+
+  const recognition = useSpeechRecognition({
+    lang: "en-US",
+    onFinal: (text) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      void sendMessage({ text: trimmed });
+    },
+    onInterim: (text) => {
+      if (textareaRef.current) textareaRef.current.value = text;
+    },
+  });
+
+  const toggleMic = () => {
+    if (recognition.listening) recognition.stop();
+    else {
+      stopSpeaking();
+      recognition.start();
+    }
+  };
+
+  // Auto-speak the assistant's reply when voice mode is on and streaming finishes
+  const spokenIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!voiceMode || !ttsSupported) return;
+    if (status !== "ready") return;
+    const last = messages[messages.length - 1];
+    if (!last || last.role !== "assistant") return;
+    if (spokenIdRef.current === last.id) return;
+    const text = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
+    if (!text) return;
+    spokenIdRef.current = last.id;
+    speak(text);
+  }, [voiceMode, ttsSupported, status, messages, speak]);
 
   // Auto-send an explanation request when a lesson is selected from /lessons
   const autoSentRef = useRef<string | null>(null);
@@ -114,6 +153,12 @@ Break it down step by step:
   const isLoading = status === "submitted" || status === "streaming";
   const lastMessage = messages[messages.length - 1];
   const showThinking = status === "submitted" || (status === "streaming" && lastMessage?.role !== "assistant");
+  const toggleVoiceMode = () => {
+    setVoiceMode((v) => {
+      if (v) stopSpeaking();
+      return !v;
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-[oklch(0.985_0.01_95)]">
@@ -132,6 +177,26 @@ Break it down step by step:
               English tutor for Grade 10 students in Myanmar
             </p>
           </div>
+          {ttsSupported && (
+            <Button
+              type="button"
+              variant={voiceMode ? "default" : "outline"}
+              size="sm"
+              onClick={toggleVoiceMode}
+              aria-pressed={voiceMode}
+              title={voiceMode ? "Voice mode on — replies read aloud" : "Turn on voice mode"}
+            >
+              {voiceMode ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              <span className="ml-1.5 hidden sm:inline">
+                {voiceMode ? "Voice on" : "Voice"}
+              </span>
+            </Button>
+          )}
+          {speaking && (
+            <Button type="button" variant="ghost" size="sm" onClick={stopSpeaking} title="Stop speaking">
+              <VolumeX className="h-4 w-4" />
+            </Button>
+          )}
         </div>
       </header>
 
@@ -206,7 +271,25 @@ Break it down step by step:
               placeholder="Ask about a sentence, grammar rule, or English word…"
               autoFocus
             />
-            <PromptInputFooter className="justify-end">
+            <PromptInputFooter className="justify-between">
+              <div className="flex items-center gap-2">
+                {recognition.supported && (
+                  <Button
+                    type="button"
+                    variant={recognition.listening ? "default" : "outline"}
+                    size="icon-sm"
+                    onClick={toggleMic}
+                    aria-pressed={recognition.listening}
+                    title={recognition.listening ? "Stop listening" : "Speak your question"}
+                    className={recognition.listening ? "animate-pulse" : ""}
+                  >
+                    {recognition.listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  </Button>
+                )}
+                {recognition.listening && (
+                  <span className="text-xs text-muted-foreground">Listening…</span>
+                )}
+              </div>
               <PromptInputSubmit status={status} disabled={isLoading} />
             </PromptInputFooter>
           </PromptInput>
