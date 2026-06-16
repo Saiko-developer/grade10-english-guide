@@ -201,7 +201,7 @@ Break it down step by step:
               !ttsSupported
                 ? "Voice not supported in this browser"
                 : voiceMode
-                  ? "Voice mode on — replies read aloud (English + Burmese)"
+                  ? "Voice on — replies read aloud (Burmese-only for lesson explanations)"
                   : "Turn on voice mode"
             }
           >
