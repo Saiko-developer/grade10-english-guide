@@ -1,0 +1,301 @@
+{
+  "unit": "Unit 1",
+  "unitTitle": "A Day in the Life",
+  "lessons": [
+    {
+      "id": "1A-reading",
+      "code": "1A",
+      "type": "Reading",
+      "title": "A Day in the Life of Su Su",
+      "titleMy": "Su Su ၏ နေ့စဉ်ဘဝ",
+      "intro": "Read about Su Su's daily routine and learn how to describe everyday activities in English.",
+      "introMy": "Su Su ရဲ့ နေ့စဉ်အလုပ်တွေအကြောင်း ဖတ်ပြီး အင်္ဂလိပ်လို ဘယ်လိုပြောရမလဲဆိုတာ လေ့လာကြရအောင်နော်။",
+      "passage": [
+        {
+          "en": "Su Su is a Grade 10 student.",
+          "my": "Su Su ဟာ ဆယ်တန်းကျောင်းသူ တစ်ယောက်ပါ။",
+          "structure": "Subject (Su Su) + Verb (is) + Article (a) + Noun phrase (Grade 10 student). This is a simple 'be' sentence telling us WHO someone IS."
+        },
+        {
+          "en": "She wakes up at six o'clock every morning.",
+          "my": "သူမဟာ မနက်တိုင်း ၆ နာရီမှာ အိပ်ရာထတယ်။",
+          "structure": "Subject (She) + Verb (wakes up) + Time phrase (at six o'clock) + Frequency phrase (every morning). 'Wakes up' is Present Simple — used for daily habits."
+        },
+        {
+          "en": "After breakfast, she goes to school by bus.",
+          "my": "မနက်စာ စားပြီးတဲ့အခါ သူမဟာ ကျောင်းကို ဘတ်စ်ကားနဲ့ သွားတယ်။",
+          "structure": "Time clause (After breakfast) + Subject (she) + Verb (goes) + Place (to school) + Means of transport (by bus). 'By + transport' = how she travels."
+        },
+        {
+          "en": "She studies hard because she wants to pass the matriculation exam.",
+          "my": "သူမဟာ တက္ကသိုလ်ဝင်စာမေးပွဲ အောင်ချင်လို့ ကြိုးစားပြီး စာလုပ်တယ်။",
+          "structure": "Main clause (She studies hard) + 'because' + Reason clause (she wants to pass...). 'Because' connects an action with its reason."
+        }
+      ],
+      "questions": [
+        {
+          "q": "What grade is Su Su in?",
+          "qMy": "Su Su က ဘယ်တန်းလဲ?",
+          "answers": ["grade 10", "10", "ten", "grade ten"],
+          "hint": "Look at the first sentence.",
+          "explanationMy": "ပထမဆုံးဝါကျမှာ 'Su Su is a Grade 10 student' လို့ပါတယ်။ ဒါကြောင့် အဖြေက 'Grade 10' ပါ။",
+          "ruleMy": "မေးခွန်းကို ဖြေတဲ့အခါ စာပိုဒ်ထဲက အသေးစိတ်အချက် (specific detail) ကို ပြန်ရှာရပါတယ်။"
+        },
+        {
+          "q": "What time does Su Su wake up?",
+          "qMy": "Su Su ဘယ်အချိန်မှာ အိပ်ရာထလဲ?",
+          "answers": ["six", "6", "six o'clock", "6 o'clock", "at six", "at 6"],
+          "hint": "Look at the second sentence — 'at ___ o'clock'.",
+          "explanationMy": "ဒုတိယဝါကျမှာ 'at six o'clock' လို့ပါတယ်။ အချိန်ကို ဖြေတဲ့အခါ 'at + time' သုံးပါတယ်။",
+          "ruleMy": "အင်္ဂလိပ်စာမှာ အချိန်အတိအကျအတွက် 'at' ကိုသုံးပါတယ် — at 6 o'clock, at noon, at night."
+        },
+        {
+          "q": "How does Su Su go to school?",
+          "qMy": "Su Su က ကျောင်းကို ဘယ်လို သွားလဲ?",
+          "answers": ["by bus", "bus", "she goes by bus"],
+          "hint": "'By + ____' tells us HOW she travels.",
+          "explanationMy": "တတိယဝါကျမှာ 'by bus' လို့ပါတယ်။ သယ်ယူပို့ဆောင်ရေး ပြောချင်ရင် 'by + car/bus/train' သုံးပါတယ်။",
+          "ruleMy": "ဘယ်လိုသွားလဲဆိုတဲ့ မေးခွန်းအတွက် 'by + transport' ပုံစံကို မှတ်ထားပါ။"
+        }
+      ],
+      "bonusQuestions": [
+        {
+          "q": "Translate to English: 'သူမက ကြိုးစားတယ်။'",
+          "qMy": "မြန်မာဝါကျ 'သူမက ကြိုးစားတယ်။' ကို အင်္ဂလိပ်လို ဘာသာပြန်ပါ။",
+          "answers": ["she studies hard", "she works hard", "she tries hard"],
+          "hint": "Subject + verb + 'hard'.",
+          "explanationMy": "'ကြိုးစားတယ်' ဆိုတာ 'studies hard' သို့မဟုတ် 'works hard' လို့ ဘာသာပြန်နိုင်ပါတယ်။",
+          "ruleMy": "'Hard' က adverb ဖြစ်ပြီး verb နောက်မှာ လိုက်ပါတယ် — work hard, study hard, try hard."
+        },
+        {
+          "q": "Fill in the blank: She goes to school ___ bus.",
+          "qMy": "ကွက်လပ်ဖြည့်ပါ — She goes to school ___ bus.",
+          "answers": ["by"],
+          "hint": "Means of transport preposition.",
+          "explanationMy": "'By bus' ပါ။ သယ်ယူပို့ဆောင်ရေးအတွက် 'by' ကိုသုံးရပါတယ်။",
+          "ruleMy": "by + bus / car / train / plane / boat (a, the မထည့်ပါနဲ့)။"
+        }
+      ]
+    },
+    {
+      "id": "1A-comprehension",
+      "code": "1A",
+      "type": "Comprehension",
+      "title": "Understanding the Passage",
+      "titleMy": "စာပိုဒ်ကို နားလည်ခြင်း",
+      "intro": "Practice finding the main idea and specific details from short English texts.",
+      "introMy": "အင်္ဂလိပ်စာပိုဒ်တိုလေးတွေထဲက ပင်မအကြောင်းအရာ (main idea) နဲ့ အသေးစိတ်အချက် (details) တွေကို ရှာတတ်အောင် လေ့ကျင့်ကြမယ်နော်။",
+      "passage": [
+        {
+          "en": "My name is Aung Aung. I live in Mandalay with my family.",
+          "my": "ကျွန်တော့်နာမည်က အောင်အောင်ပါ။ မိသားစုနဲ့ မန္တလေးမှာ နေပါတယ်။",
+          "structure": "Two simple sentences. First introduces NAME ('My name is...'). Second tells WHERE someone LIVES ('I live in + place')."
+        },
+        {
+          "en": "I have one brother and two sisters.",
+          "my": "ကျွန်တော့်မှာ မောင် တစ်ယောက်နဲ့ ညီမ နှစ်ယောက် ရှိပါတယ်။",
+          "structure": "Subject (I) + Verb (have) + Object (one brother and two sisters). 'Have' shows possession or family relationships."
+        },
+        {
+          "en": "My father is a teacher and my mother is a nurse.",
+          "my": "ကျွန်တော့်အဖေက ဆရာဖြစ်ပြီး အမေက သူနာပြုပါ။",
+          "structure": "Two clauses joined by 'and'. Pattern: [Person] + is + a + [job]. 'And' joins two equal ideas together."
+        }
+      ],
+      "questions": [
+        {
+          "q": "Where does Aung Aung live?",
+          "qMy": "အောင်အောင် ဘယ်မှာ နေလဲ?",
+          "answers": ["mandalay", "in mandalay", "he lives in mandalay"],
+          "hint": "Look for 'I live in ___'.",
+          "explanationMy": "ပထမစာကြောင်းမှာ 'I live in Mandalay' လို့ပါတယ်။ နေတဲ့နေရာကို ဖြေတဲ့အခါ 'in + city' သုံးပါတယ်။",
+          "ruleMy": "မြို့ကြီးတွေအတွက် 'in' သုံးပါ — in Mandalay, in Yangon, in Bangkok."
+        },
+        {
+          "q": "How many sisters does Aung Aung have?",
+          "qMy": "အောင်အောင်မှာ ညီမ ဘယ်နှစ်ယောက် ရှိလဲ?",
+          "answers": ["two", "2", "two sisters"],
+          "hint": "Count carefully — '___ sisters'.",
+          "explanationMy": "ဒုတိယစာကြောင်းမှာ 'two sisters' လို့ပါတယ်။ အရေအတွက်ကို သေချာဖတ်ပါနော်။",
+          "ruleMy": "ပစ္စည်းတစ်ခုထက်ပိုရင် noun နောက်မှာ -s ထည့်ပါ — one sister, two sisters."
+        },
+        {
+          "q": "What is Aung Aung's mother's job?",
+          "qMy": "အောင်အောင်ရဲ့ အမေ ဘာအလုပ်လုပ်လဲ?",
+          "answers": ["nurse", "a nurse", "she is a nurse"],
+          "hint": "'My mother is a ___'.",
+          "explanationMy": "တတိယစာကြောင်းမှာ 'my mother is a nurse' လို့ပါတယ်။ အလုပ်အကိုင်ပြောတဲ့အခါ 'is a + job' သုံးပါတယ်။",
+          "ruleMy": "အလုပ်အကိုင်ပြောရင် article 'a' သို့မဟုတ် 'an' မမေ့ပါနဲ့ — a teacher, an engineer."
+        }
+      ],
+      "bonusQuestions": [
+        {
+          "q": "How many people are in Aung Aung's family (including himself)? Just write a number.",
+          "qMy": "အောင်အောင်ရဲ့ မိသားစုမှာ စုစုပေါင်း ဘယ်နှစ်ယောက်ရှိလဲ (သူ့အပါအဝင်)? နံပါတ်ပဲ ရိုက်ပါ။",
+          "answers": ["6", "six"],
+          "hint": "Aung Aung + father + mother + 1 brother + 2 sisters.",
+          "explanationMy": "အောင်အောင် + အဖေ + အမေ + မောင် ၁ ယောက် + ညီမ ၂ ယောက် = ၆ ယောက်ပါ။",
+          "ruleMy": "Comprehension မေးခွန်းတွေမှာ တစ်ခါတစ်ရံ စာထဲက အချက်အလက်တွေကို ပေါင်းရတတ်ပါတယ်။"
+        },
+        {
+          "q": "True or False: Aung Aung's father is a nurse. (Answer: true or false)",
+          "qMy": "မှန် သို့မဟုတ် မှား: အောင်အောင်ရဲ့အဖေက သူနာပြုပါ။ (true သို့မဟုတ် false ဟု ဖြေပါ)",
+          "answers": ["false"],
+          "hint": "Re-read the third sentence carefully.",
+          "explanationMy": "မှားပါတယ် (false)။ အဖေက ဆရာ၊ အမေက သူနာပြုပါ။",
+          "ruleMy": "True/False မေးခွန်းတွေဖြေတဲ့အခါ စာထဲက အချက်အလက်နဲ့ တိုက်ဆိုင်ပြီး စစ်ပါ။"
+        }
+      ]
+    },
+    {
+      "id": "1B-vocabulary",
+      "code": "1B",
+      "type": "Vocabulary",
+      "title": "Daily Activity Words",
+      "titleMy": "နေ့စဉ်လုပ်ဆောင်ချက် စကားလုံးများ",
+      "intro": "Learn new vocabulary for talking about daily routines.",
+      "introMy": "နေ့စဉ်လုပ်ဆောင်ချက်တွေအကြောင်း ပြောဆိုနိုင်ဖို့ ဝေါဟာရအသစ်တွေ လေ့လာကြရအောင်။",
+      "passage": [
+        {
+          "en": "wake up — to stop sleeping and open your eyes",
+          "my": "wake up — အိပ်ရာထခြင်း / အိပ်ပျော်ရာမှ နိုးလာခြင်း",
+          "structure": "Phrasal verb: 'wake' + 'up'. Used as: I wake up at 7."
+        },
+        {
+          "en": "breakfast — the first meal of the day",
+          "my": "breakfast — တစ်နေ့တာရဲ့ ပထမဆုံးအစားအစာ (မနက်စာ)",
+          "structure": "Noun. Common use: 'eat breakfast' or 'have breakfast'."
+        },
+        {
+          "en": "study — to read and learn about something",
+          "my": "study — စာဖတ်ပြီး လေ့လာသင်ယူခြင်း",
+          "structure": "Verb. Pattern: study + subject (study English, study math)."
+        },
+        {
+          "en": "homework — schoolwork to do at home",
+          "my": "homework — အိမ်စာ",
+          "structure": "Noun (uncountable — no 's'). Use with 'do': 'do homework', NOT 'make homework'."
+        }
+      ],
+      "questions": [
+        {
+          "q": "What word means 'the first meal of the day'?",
+          "qMy": "'တစ်နေ့တာရဲ့ ပထမဆုံးအစားအစာ' ကို အင်္ဂလိပ်လို ဘာခေါ်လဲ?",
+          "answers": ["breakfast"],
+          "hint": "Starts with 'b' — you eat it in the morning.",
+          "explanationMy": "မနက်စာကို 'breakfast' လို့ ခေါ်ပါတယ်။ Break (ဖြတ်) + fast (အစာရှောင်) — တစ်ညလုံး အစာရှောင်ထားရာက ဖြတ်တောက်တဲ့အစားအစာ။",
+          "ruleMy": "ထမင်းသုံးနပ်ကို — breakfast (မနက်), lunch (နေ့), dinner (ည)။"
+        },
+        {
+          "q": "Choose the correct verb: 'I ___ my homework every night.' (do / make)",
+          "qMy": "မှန်ကန်တဲ့ verb ကို ရွေးပါ — 'I ___ my homework every night.' (do / make)",
+          "answers": ["do"],
+          "hint": "We DO homework, we don't MAKE it.",
+          "explanationMy": "'do my homework' လို့ပြောရပါတယ်။ 'make homework' လို့ မပြောရပါဘူး — အင်္ဂလိပ်လို သတ်မှတ်ထားတဲ့ collocation ပါ။",
+          "ruleMy": "Collocation မှတ်ထားရမယ်: do homework, do exercise, make a cake, make a decision."
+        },
+        {
+          "q": "What is the opposite of 'wake up'?",
+          "qMy": "'wake up' ရဲ့ ဆန့်ကျင်ဘက် ဘာလဲ?",
+          "answers": ["go to sleep", "sleep", "go to bed", "fall asleep"],
+          "hint": "What do you do at night?",
+          "explanationMy": "'wake up' ရဲ့ ဆန့်ကျင်ဘက်က 'go to sleep' သို့မဟုတ် 'go to bed' ပါ။",
+          "ruleMy": "ဆန့်ကျင်ဘက် (antonym) တွေ တွဲမှတ်ပါ — wake up ↔ go to sleep, start ↔ finish."
+        }
+      ],
+      "bonusQuestions": [
+        {
+          "q": "Fill in: 'I ___ English for two hours yesterday.' (Use past tense of 'study')",
+          "qMy": "ဖြည့်ပါ — 'I ___ English for two hours yesterday.' ('study' ရဲ့ past tense သုံးပါ)",
+          "answers": ["studied"],
+          "hint": "'study' ends in 'y' — change y to i + ed.",
+          "explanationMy": "'studied' ပါ။ Verb က 'y' နဲ့ဆုံးတဲ့အခါ 'y' ကို 'i' ပြောင်းပြီး '-ed' ထည့်ပါ။",
+          "ruleMy": "Spelling rule: study → studied, try → tried, cry → cried."
+        },
+        {
+          "q": "Translate to English: 'မနက်စာ စားပြီးပြီလား?'",
+          "qMy": "မြန်မာဝါကျ 'မနက်စာ စားပြီးပြီလား?' ကို အင်္ဂလိပ်လို ဘာသာပြန်ပါ။",
+          "answers": ["have you had breakfast", "did you have breakfast", "have you eaten breakfast", "did you eat breakfast"],
+          "hint": "Use 'have you ___ breakfast?'",
+          "explanationMy": "'Have you had breakfast?' သို့မဟုတ် 'Did you have breakfast?' လို့ပြောနိုင်ပါတယ်။",
+          "ruleMy": "'Have/eat breakfast' နှစ်မျိုးလုံး မှန်ပါတယ်။ ဖြစ်ပြီးခါစဆိုရင် present perfect (have you had) ပိုသင့်တော်ပါတယ်။"
+        }
+      ]
+    },
+    {
+      "id": "1C-grammar",
+      "code": "1C",
+      "type": "Grammar",
+      "title": "Present Simple Tense",
+      "titleMy": "Present Simple Tense (ပစ္စုပ္ပန်ရိုးရိုးကာလ)",
+      "intro": "Learn how to talk about habits, daily routines, and facts using the Present Simple tense.",
+      "introMy": "နေ့စဉ်အလုပ်တွေ၊ အကျင့်တွေ၊ အမှန်တရားတွေအကြောင်း ပြောတဲ့အခါ သုံးတဲ့ Present Simple Tense ကို လေ့လာကြရအောင်။",
+      "passage": [
+        {
+          "en": "RULE: I / You / We / They + base verb. He / She / It + verb + s.",
+          "my": "စည်းမျဉ်း: I / You / We / They နောက်မှာ verb ရိုးရိုး၊ He / She / It နောက်မှာ verb နောက် -s ထည့်ပါ။",
+          "structure": "This is the core rule of Present Simple. The 'third person singular -s' is the #1 thing students forget!"
+        },
+        {
+          "en": "EXAMPLE: I play football. / She plays football.",
+          "my": "ဥပမာ: I play football. (ကျွန်တော် ဘောလုံးကန်တယ်။) / She plays football. (သူမ ဘောလုံးကန်တယ်။)",
+          "structure": "Notice 'play' vs 'plays'. The 's' appears ONLY with he/she/it."
+        },
+        {
+          "en": "NEGATIVE: I do not (don't) play. / He does not (doesn't) play.",
+          "my": "အပြုနိုင်ပုံစံ (negative): I don't play. / He doesn't play. (verb ကို ပြန်ပြောင်းစရာ မလိုပါ)",
+          "structure": "Use 'do/does' + 'not' + BASE verb. After 'doesn't', the verb goes BACK to base form (no -s)."
+        },
+        {
+          "en": "QUESTION: Do you play? / Does she play?",
+          "my": "မေးခွန်းပုံစံ: Do you play? / Does she play?",
+          "structure": "'Do/Does' goes to the FRONT. The verb returns to base form. Don't say 'Does she plays?' — wrong!"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Fill in: She ___ (eat) rice every day.",
+          "qMy": "ဖြည့်ပါ — She ___ (eat) rice every day.",
+          "answers": ["eats"],
+          "hint": "Subject is 'she' — what do you add to the verb?",
+          "explanationMy": "'eats' ပါ။ Subject က 'she' ဖြစ်လို့ verb 'eat' နောက်မှာ '-s' ထည့်ရပါတယ်။",
+          "ruleMy": "He / She / It နောက်က verb မှာ '-s' မမေ့ပါနဲ့။ ဒါက Present Simple ရဲ့ အရေးအကြီးဆုံး စည်းမျဉ်းပါ။"
+        },
+        {
+          "q": "Fill in: They ___ (not / like) coffee. (write the full negative form)",
+          "qMy": "ဖြည့်ပါ — They ___ (not / like) coffee. (negative form အပြည့်အစုံ ရိုက်ပါ)",
+          "answers": ["do not like", "don't like"],
+          "hint": "'They' uses 'do' + 'not' + base verb.",
+          "explanationMy": "'don't like' သို့မဟုတ် 'do not like' ပါ။ They နောက်မှာ 'do' သုံးပြီး verb ကို base form ('like') အတိုင်းထားရပါတယ်။",
+          "ruleMy": "Negative ဖွဲ့တဲ့အခါ verb ကို မပြောင်းပါနဲ့ — don't / doesn't ပြီးရင် base verb အတိုင်းပါ။"
+        },
+        {
+          "q": "Make a question: ___ he ___ (speak) English?",
+          "qMy": "မေးခွန်းပြုလုပ်ပါ — ___ he ___ (speak) English?",
+          "answers": ["does speak", "does, speak"],
+          "hint": "He → 'Does' at front, then base verb.",
+          "explanationMy": "'Does he speak English?' ပါ။ He / She / It အတွက် 'Does' ကို ရှေ့မှာထားပြီး verb က base form ('speak') ပါ။",
+          "ruleMy": "Question ဖွဲ့တဲ့အခါ Do/Does ကို ရှေ့မှာထား၊ verb က base form (no -s) ပါ။ 'Does he speaks?' က မှားပါတယ်။"
+        }
+      ],
+      "bonusQuestions": [
+        {
+          "q": "Correct this sentence: 'My brother go to school.'",
+          "qMy": "ဒီဝါကျကို ပြင်ပါ — 'My brother go to school.'",
+          "answers": ["my brother goes to school"],
+          "hint": "'My brother' = he. What ending does the verb need?",
+          "explanationMy": "'My brother goes to school.' ပါ။ 'My brother' က 'he' ပါ — ဒါကြောင့် 'go' ကို 'goes' (-es ထည့်) လုပ်ရပါတယ်။",
+          "ruleMy": "Verb က -o, -s, -ch, -sh, -x နဲ့ဆုံးရင် '-s' မဟုတ်ဘဲ '-es' ထည့်ပါ — go→goes, watch→watches, fix→fixes."
+        },
+        {
+          "q": "Translate: 'သူက မုန့်ဟင်းခါး မစားဘူး။'",
+          "qMy": "ဘာသာပြန်ပါ — 'သူက မုန့်ဟင်းခါး မစားဘူး။'",
+          "answers": ["he does not eat mohinga", "he doesn't eat mohinga", "she does not eat mohinga", "she doesn't eat mohinga"],
+          "hint": "He/She + doesn't + base verb (eat).",
+          "explanationMy": "'He doesn't eat mohinga.' ပါ။ Subject က he/she ဖြစ်လို့ 'doesn't' သုံးပြီး verb ကို base form ('eat') အတိုင်းထားပါ။",
+          "ruleMy": "မြန်မာ '...မ...ဘူး' ပုံစံကို အင်္ဂလိပ်လို 'don't/doesn't + base verb' နဲ့ ဘာသာပြန်ပါ။"
+        }
+      ]
+    }
+  ]
+}
