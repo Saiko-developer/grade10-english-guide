@@ -11,6 +11,7 @@ import {
 
 import heroOwl from "@/assets/hero-owl.jpg";
 import { SiteHeader } from "@/components/SiteHeader";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,27 +34,11 @@ export const Route = createFileRoute("/")({
 });
 
 const FEATURES = [
-  {
-    icon: MessageCircle,
-    title: "Ask Sayar Owl anything",
-    body: "A patient AI tutor that breaks down any sentence and explains the 'why' behind every grammar rule.",
-  },
-  {
-    icon: Languages,
-    title: "Myanmar translation context",
-    body: "Tricky words and phrases explained in Burmese (မြန်မာ) so the meaning truly clicks.",
-  },
-  {
-    icon: BookOpen,
-    title: "Grade 10 aligned",
-    body: "Lessons and examples tuned to the Myanmar Grade 10 syllabus and matriculation exam style.",
-  },
-  {
-    icon: Trophy,
-    title: "Practice that sticks",
-    body: "Every answer ends with a tiny practice question so you actually remember what you learned.",
-  },
-];
+  { icon: MessageCircle, key: "ask" },
+  { icon: Languages, key: "mm" },
+  { icon: BookOpen, key: "g10" },
+  { icon: Trophy, key: "practice" },
+] as const;
 
 const LESSONS = [
   { tag: "Grammar", title: "Present Perfect vs Past Simple", time: "8 min" },
@@ -65,6 +50,7 @@ const LESSONS = [
 ];
 
 function Landing() {
+  const { t } = useI18n();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
@@ -76,15 +62,13 @@ function Landing() {
           <div>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
-              For Grade 10 students in Myanmar
+              {t("hero.badge")}
             </span>
             <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-              Learn English with{" "}
-              <span className="text-primary">Sayar Owl</span> — your patient AI tutor.
+              {t("hero.title.a")} <span className="text-primary">{t("hero.title.b")}</span> {t("hero.title.c")}
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
-              Paste any sentence or grammar question. Sayar Owl explains the rule, the structure, and the
-              Myanmar meaning — kindly and clearly, every time.
+              {t("hero.subtitle")}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
@@ -92,19 +76,19 @@ function Landing() {
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
               >
                 <MessageCircle className="h-4 w-4" />
-                Start chatting with Sayar Owl
+                {t("hero.cta.chat")}
               </Link>
               <Link
                 to="/lessons"
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
               >
                 <BookOpen className="h-4 w-4" />
-                Browse lessons
+                {t("hero.cta.browse")}
               </Link>
             </div>
             <div className="mt-6 flex items-center gap-5 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1.5"><GraduationCap className="h-4 w-4" /> Grade 10 syllabus</div>
-              <div className="flex items-center gap-1.5"><Languages className="h-4 w-4" /> English + မြန်မာ</div>
+              <div className="flex items-center gap-1.5"><GraduationCap className="h-4 w-4" /> {t("hero.tag.syllabus")}</div>
+              <div className="flex items-center gap-1.5"><Languages className="h-4 w-4" /> {t("hero.tag.langs")}</div>
             </div>
           </div>
           <div className="relative">
@@ -124,19 +108,17 @@ function Landing() {
       <section className="border-t border-border/60 bg-card/40">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Why students love Sayar Owl</h2>
-            <p className="mt-3 text-muted-foreground">
-              A modern learning experience built for the way Myanmar students actually study English.
-            </p>
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{t("features.title")}</h2>
+            <p className="mt-3 text-muted-foreground">{t("features.subtitle")}</p>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {FEATURES.map((f) => (
-              <div key={f.title} className="rounded-2xl border border-border bg-background p-5 transition hover:shadow-md">
+              <div key={f.key} className="rounded-2xl border border-border bg-background p-5 transition hover:shadow-md">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <f.icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-4 text-base font-semibold">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{f.body}</p>
+                <h3 className="mt-4 text-base font-semibold">{t(`feature.${f.key}.title`)}</h3>
+                <p className="mt-1.5 text-sm text-muted-foreground">{t(`feature.${f.key}.body`)}</p>
               </div>
             ))}
           </div>
@@ -148,11 +130,11 @@ function Landing() {
         <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Popular lessons</h2>
-              <p className="mt-2 text-muted-foreground">Quick, focused topics straight from the Grade 10 syllabus.</p>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{t("lessons.popular")}</h2>
+              <p className="mt-2 text-muted-foreground">{t("lessons.popular.sub")}</p>
             </div>
             <Link to="/lessons" className="hidden text-sm font-medium text-primary hover:underline sm:inline">
-              View all →
+              {t("lessons.viewall")}
             </Link>
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -171,7 +153,7 @@ function Landing() {
                 <h3 className="mt-3 text-base font-semibold group-hover:text-primary">{l.title}</h3>
                 <p className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
                   <Lightbulb className="h-3.5 w-3.5" />
-                  Ask Sayar Owl to explain this
+                  {t("lessons.askToExplain")}
                 </p>
               </Link>
             ))}
@@ -182,25 +164,20 @@ function Landing() {
       {/* CTA */}
       <section className="border-t border-border/60 bg-primary/5">
         <div className="mx-auto max-w-4xl px-4 py-16 text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Ready to ask your first question?
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-            Sayar Owl is online now — patient, encouraging, and happy to explain anything in English or
-            မြန်မာ.
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{t("cta.title")}</h2>
+          <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{t("cta.subtitle")}</p>
           <Link
             to="/tutor"
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
           >
             <MessageCircle className="h-4 w-4" />
-            Chat with Sayar Owl
+            {t("cta.button")}
           </Link>
         </div>
       </section>
 
       <footer className="border-t border-border/60 py-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Sayar Owl Academy · Built with care for Myanmar students
+        {t("footer", { year: new Date().getFullYear() })}
       </footer>
     </div>
   );

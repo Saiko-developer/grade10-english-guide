@@ -26,6 +26,7 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Button } from "@/components/ui/button";
 import { useSpeechRecognition, useSpeechSynthesis } from "@/hooks/use-voice";
+import { LanguageToggle, useI18n } from "@/lib/i18n";
 
 type TutorSearch = { lesson?: string; category?: string };
 
@@ -56,22 +57,23 @@ export const Route = createFileRoute("/tutor")({
 const STARTERS = [
   {
     icon: BookOpen,
-    title: "Explain a sentence",
+    titleKey: "starter.explain.title",
     prompt: "Can you explain this sentence to me? \"If I had studied harder, I would have passed the exam.\"",
   },
   {
     icon: Lightbulb,
-    title: "Grammar topic",
+    titleKey: "starter.grammar.title",
     prompt: "Please explain the difference between Present Perfect and Past Simple with simple examples.",
   },
   {
     icon: Languages,
-    title: "Myanmar meaning",
+    titleKey: "starter.mm.title",
     prompt: "What does \"despite\" mean? Please give me the Myanmar meaning and 2 example sentences.",
   },
 ];
 
 function Index() {
+  const { t } = useI18n();
   const { lesson, category } = Route.useSearch();
   const [transport] = useState(() => new DefaultChatTransport({ api: "/api/chat" }));
   const { messages, sendMessage, status } = useChat({
@@ -186,10 +188,9 @@ Break it down step by step:
           />
           <div className="flex-1">
             <h1 className="text-base font-semibold leading-tight">Sayar Owl</h1>
-            <p className="text-xs text-muted-foreground">
-              English tutor for Grade 10 students in Myanmar
-            </p>
+            <p className="text-xs text-muted-foreground">{t("tutor.subtitle")}</p>
           </div>
+          <LanguageToggle />
           <Button
             type="button"
             variant={voiceMode ? "default" : "outline"}
@@ -206,7 +207,7 @@ Break it down step by step:
             }
           >
             {voiceMode ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-            <span className="ml-1.5">{voiceMode ? "Voice on" : "Voice"}</span>
+            <span className="ml-1.5">{voiceMode ? t("tutor.voiceOn") : t("tutor.voice")}</span>
           </Button>
           {speaking && (
             <Button type="button" variant="ghost" size="sm" onClick={stopSpeaking} title="Stop speaking">
@@ -230,18 +231,18 @@ Break it down step by step:
                     className="h-24 w-24"
                   />
                 }
-                title="Mingalaba! I'm Sayar Owl 🦉"
-                description="Ask me about any English sentence, grammar rule, or word. I'll explain the why — and add Myanmar translation when it helps."
+                title={t("tutor.greet.title")}
+                description={t("tutor.greet.desc")}
               >
                 <div className="mt-6 grid w-full gap-2 sm:grid-cols-3">
                   {STARTERS.map((s) => (
                     <button
-                      key={s.title}
+                      key={s.titleKey}
                       onClick={() => handleStarter(s.prompt)}
                       className="group flex flex-col items-start gap-2 rounded-xl border border-border bg-card p-3 text-left transition hover:border-foreground/30 hover:shadow-sm"
                     >
                       <s.icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
-                      <span className="text-sm font-medium">{s.title}</span>
+                      <span className="text-sm font-medium">{t(s.titleKey)}</span>
                       <span className="line-clamp-2 text-xs text-muted-foreground">
                         {s.prompt}
                       </span>
@@ -270,7 +271,7 @@ Break it down step by step:
                 {showThinking && (
                   <Message from="assistant">
                     <MessageContent className="bg-transparent px-0 py-0">
-                      <Shimmer>Sayar Owl is thinking…</Shimmer>
+                      <Shimmer>{t("tutor.thinking")}</Shimmer>
                     </MessageContent>
                   </Message>
                 )}
@@ -284,7 +285,7 @@ Break it down step by step:
           <PromptInput onSubmit={handleSubmit}>
             <PromptInputTextarea
               ref={textareaRef}
-              placeholder="Ask about a sentence, grammar rule, or English word…"
+              placeholder={t("tutor.placeholder")}
               autoFocus
             />
             <PromptInputFooter className="justify-between">
@@ -303,14 +304,14 @@ Break it down step by step:
                   </Button>
                 )}
                 {recognition.listening && (
-                  <span className="text-xs text-muted-foreground">Listening…</span>
+                  <span className="text-xs text-muted-foreground">{t("tutor.listening")}</span>
                 )}
               </div>
               <PromptInputSubmit status={status} disabled={isLoading} />
             </PromptInputFooter>
           </PromptInput>
           <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            Sayar Owl explains the "why" — answers may need a teacher's check.
+            {t("tutor.footer")}
           </p>
         </div>
       </main>

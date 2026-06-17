@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Lightbulb, MessageCircle } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/lessons")({
   head: () => ({
@@ -60,22 +61,21 @@ const CATEGORIES = [
 ];
 
 function LessonsPage() {
+  const { t } = useI18n();
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-4 py-12">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <BookOpen className="h-4 w-4" /> Lessons
+          <BookOpen className="h-4 w-4" /> {t("lessons.crumb")}
         </div>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">Grade 10 English lessons</h1>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Pick any lesson and ask Sayar Owl to explain it your way — with Myanmar translation when you need it.
-        </p>
+        <h1 className="mt-2 text-4xl font-bold tracking-tight">{t("lessons.title")}</h1>
+        <p className="mt-2 max-w-2xl text-muted-foreground">{t("lessons.subtitle")}</p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {CATEGORIES.map((cat) => (
             <section key={cat.title} className="rounded-2xl border border-border bg-card p-6">
-              <h2 className="text-lg font-semibold">{cat.title}</h2>
+              <h2 className="text-lg font-semibold">{t(`cat.${cat.title}`)}</h2>
               <ul className="mt-4 space-y-2">
                 {cat.items.map((item) => (
                   <li key={item}>
@@ -98,14 +98,14 @@ function LessonsPage() {
         </div>
 
         <div className="mt-10 rounded-2xl border border-border bg-primary/5 p-6 text-center">
-          <h2 className="text-xl font-semibold">Can't find your topic?</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Just ask Sayar Owl directly — any sentence, any rule.</p>
+          <h2 className="text-xl font-semibold">{t("lessons.cant.title")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("lessons.cant.sub")}</p>
           <Link
             to="/tutor"
             className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
           >
             <MessageCircle className="h-4 w-4" />
-            Ask Sayar Owl
+            {t("lessons.cant.btn")}
           </Link>
         </div>
       </main>
