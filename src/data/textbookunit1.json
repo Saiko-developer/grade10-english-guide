@@ -51,8 +51,8 @@
             { "question_number": 4, "question": "Why do we use gestures when we speak?", "answer": "To help the listener understand us better." },
             { "question_number": 5, "question": "How do we help the reader understand what we write better?", "answer": "By using graphics such as pictures, photographs, charts, and tables." },
             { "question_number": 6, "question": "What are the two forms of communication?", "answer": "Verbal communication and non-verbal communication." },
-            { "question_number": 7, "question": "Do you want to learn any other foreign language apart from English? Why?", "answer": "Yes, I want to learn Japanese because I want to study abroad and enjoy Japanese animation." },
-            { "question_number": 8, "question": "Which language skill is the most difficult for you to learn? Why?", "answer": "Writing is the most difficult skill for me because it requires a lot of grammatical accuracy and vocabulary." }
+            { "question_number": 7, "question": "Do you want to learn any other foreign language apart from English? Why?", "answer": "Yes, I want to learn Japanese because I want to study abroad and explore Japanese culture." },
+            { "question_number": 8, "question": "Which language skill is the most difficult for you to learn? Why?", "answer": "Writing is the most difficult skill for me because it requires a lot of practice and attention to grammar and spelling." }
           ]
         },
         "part_C": {
@@ -71,6 +71,7 @@
           ]
         }
       }
+    },
     {
       "lesson": "1B Vocabulary",
       "topic": "Countries, Nationalities and Languages",
@@ -107,6 +108,7 @@
           { "question_number": 10, "text": "I like ___________ food though I don't know how to use the chopstick.", "answer": "Chinese" }
         ]
       }
+    },
     {
       "lesson": "1C Grammar",
       "topic": "Nouns in Apposition",
@@ -133,25 +135,31 @@
             "text": "Loch Ness, a large mountain lake, is in Scotland.",
             "apposition_phrases": ["a large mountain lake"]
           },
-          {"question_number": 5,
+          {
+            "question_number": 5,
             "text": "Mt. Everest, the highest peak in the world, is in Nepal.",
             "apposition_phrases": ["the highest peak in the world"]
           },
-          {"question_number": 6,
+          {
+            "question_number": 6,
             "text": "I'd love to climb Kilimanjaro, the highest mountain in Tanzania.",
             "apposition_phrases": ["the highest mountain in Tanzania"]
           },
-          {"question_number": 7,
+          {
+            "question_number": 7,
             "text": "Brussels sprout, a green vegetable like a tiny cabbage, is quite delicious to eat.",
             "apposition_phrases": ["a green vegetable like a tiny cabbage"]
           },
-          {"question_number": 8,
+          {
+            "question_number": 8,
             "text": "The Nile, the longest river in the world, is in northeastern Africa.",
             "apposition_phrases": ["the longest river in the world"]
           },
-          {"question_number": 9,
+          {
+            "question_number": 9,
             "text": "Judo, a Japanese martial art, originated from jujitsu, a samurai unarmed fighting technique.",
-            "apposition_phrases": ["a Japanese martial art", "a samurai unarmed fighting technique"]}
+            "apposition_phrases": ["a Japanese martial art", "a samurai unarmed fighting technique"]
+          }
         ]
       }
     }
