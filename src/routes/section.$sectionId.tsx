@@ -153,7 +153,7 @@ function AnswerTryBox({
   const [checked, setChecked] = useState<null | boolean>(null);
 
   const normalize = (s: string) =>
-    s.toLowerCase().trim().replace(/[.,!?;:"'`’]/g, "").replace(/\s+/g, " ");
+    s.toLowerCase().trim().replace(/[.,!?;:"'`']/g, "").replace(/\s+/g, " ");
   const isMatch = () => {
     const a = normalize(val);
     if (!a) return false;
@@ -201,7 +201,7 @@ function AnswerTryBox({
       )}
       {checked === false && (
         <div className="rounded-md border border-rose-300 bg-rose-50 px-3 py-2 text-xs text-rose-800 dark:bg-rose-950/30 dark:text-rose-200">
-          ❌ နည်းနည်းလွဲသွားတယ်နော် — ထပ်စဉ်းစားကြည့်ပါ၊ ဒါမှမဟုတ် "Reveal Answer" နှိပ်လိုက်ပါ။
+          ❌ နည်းနည်းလွဲသွားတယ်နော် — ထပ်စဉ်းစားကြည့်ပါ၊ ဒါမှမဟုတ် "Reveal Answer" နှိပ်ပါ။
         </div>
       )}
       {revealed && (
@@ -257,8 +257,7 @@ function Section1A() {
         <OwlBadge>
           <p className="font-semibold">မင်္ဂလာပါ! ဆရာ ဇီးကွက်ပါ 🦉</p>
           <p>
-            ဘယ်ဘက်က စာပိုဒ်ကို သေသေချာချာ ဖတ်ပါ။ ပြီးရင် ညာဘက်က လေ့ကျင့်ခန်း A, B, C ကို
-            တစ်ခုချင်း ဖြေကြည့်ပါ။ <strong>အဖြေတွေကို မပြသေးပါဘူး</strong> — ကိုယ်တိုင် အရင်စမ်းပါ။
+            ဘယ်ဘက်က စာပိုဒ်ကို သေသေချာချာ ဖတ်ပါ။ ပြီးရင် ညာဘက်က လေ့ကျင့်ခန်း A, B, C တစ်ခုချင်း ဖြေကြည့်ပါ။ <strong>အဖြေတွေကို မပြသေးပါဘူး</strong> — ကိုယ်တိုင် စဉ်းစားပြီး ကြိုးစားကြည့်ပါ။
           </p>
         </OwlBadge>
 
@@ -396,8 +395,7 @@ function Section1B() {
         </div>
         <h1 className="mt-2 text-2xl font-bold leading-tight">{data.topic}</h1>
         <OwlBadge>
-          ဒီအပိုင်းမှာ နိုင်ငံ၊ နိုင်ငံသား၊ ဘာသာစကား ဝေါဟာရတွေကို အသံထွက်နဲ့အတူ လေ့လာရမှာဖြစ်ပြီး၊
-          ပြီးရင် ဝါကျတွေကို ပြန်ရေးရတဲ့ လေ့ကျင့်ခန်းကို ဖြေရမှာပါ။ <strong>အဖြေတွေကို မပြသေးပါဘူး</strong> ။
+          ဒီအပိုင်းမှာ နိုင်ငံ၊ နိုင်ငံသား၊ ဘာသာစကား ဝေါဟာရတွေကို အသံထွက်နဲ့တစ်ခြင်း သုံးမည် ဖြစ်ပါတယ်။ ပြီးရင် ဝါကျတွေကို ပြန်ရေးရတဲ့ လေ့ကျင့်ခန်းကို ဖြေရမှာပါ။ <strong>အဖြေတွေကို မပြသေးပါဘူး</strong> — ကိုယ်တိုင် စဉ်းစားပြီး ကြိုးစားကြည့်ပါ။
         </OwlBadge>
       </header>
 
@@ -543,21 +541,25 @@ function Section1C() {
       </section>
 
       {/* YouTube video */}
-      <section className="rounded-2xl border border-border bg-card p-5">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-          <Play className="h-3.5 w-3.5" /> Video — {grammar1C.youtubeTitle}
-        </div>
-        <div className="mt-3 aspect-video w-full overflow-hidden rounded-xl border border-border">
-          <iframe
-            className="h-full w-full"
-            src={`https://www.youtube.com/embed/${grammar1C.youtubeId}`}
-            title={grammar1C.youtubeTitle}
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        <p className="mt-2 text-xs italic text-muted-foreground">📝 {grammar1C.subtitleNoteMy}</p>
-      </section>
+      {grammar1C.youtubeId && (
+        <section className="rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
+            <Play className="h-3.5 w-3.5" /> Video — {grammar1C.youtubeTitle}
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">Watch this video to understand appositives better:</p>
+          <div className="mt-4 aspect-video w-full overflow-hidden rounded-xl border border-border bg-black">
+            <iframe
+              className="h-full w-full"
+              src={`https://www.youtube.com/embed/${grammar1C.youtubeId}?modestbranding=1&rel=0`}
+              title={grammar1C.youtubeTitle}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+          <p className="mt-2 text-xs italic text-muted-foreground">📝 {grammar1C.subtitleNoteMy}</p>
+        </section>
+      )}
 
       {/* Exercise A — spot apposition */}
       <section className="rounded-2xl border border-border bg-card p-5">
