@@ -246,7 +246,7 @@ function Section1A() {
         </Button>
 
         <div className="mt-4 space-y-5">
-          {passage.paragraphs.map((p) => (
+          {passage.paragraphs.map((p: any) => (
             <ParagraphBlock key={p.paragraph_id} block={p} forceShowMy={showFullMy} />
           ))}
         </div>
@@ -266,7 +266,7 @@ function Section1A() {
           title="Exercise A — Fill in the blanks"
           titleMy="လေ့ကျင့်ခန်း A — ကွက်လပ်များ ဖြည့်ပါ"
           instructions={comp.part_A.instructions}
-          items={comp.part_A.exercises.map((e) => ({
+          items={comp.part_A.exercises.map((e: any) => ({
             id: e.question_number,
             text: e.text,
             translation: partA1A_translations[e.question_number] ?? "",
@@ -278,7 +278,7 @@ function Section1A() {
           title="Exercise B — Short answers"
           titleMy="လေ့ကျင့်ခန်း B — အတိုချုံး အဖြေများ"
           instructions={comp.part_B.instructions}
-          items={comp.part_B.exercises.map((e) => ({
+          items={comp.part_B.exercises.map((e: any) => ({
             id: e.question_number,
             text: e.question,
             translation: partB1A_translations[e.question_number] ?? "",
@@ -290,7 +290,7 @@ function Section1A() {
           title="Exercise C — Function of each utterance"
           titleMy="လေ့ကျင့်ခန်း C — စကားလုံးတစ်ခုစီ၏ လုပ်ဆောင်ချက်"
           instructions={comp.part_C.instructions}
-          items={comp.part_C.exercises.map((e) => ({
+          items={comp.part_C.exercises.map((e: any) => ({
             id: e.question_number,
             text: `"${e.utterance}"`,
             translation: partC1A_translations[e.question_number] ?? "",
@@ -421,13 +421,13 @@ function Section1B() {
             <table className="w-full text-xs">
               <thead className="bg-secondary">
                 <tr>
-                  {partA.headers.map((h) => (
+                  {partA.headers.map((h: any) => (
                     <th key={h} className="px-2 py-1.5 text-left font-semibold">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {partA.table_data.map((r) => (
+                {partA.table_data.map((r: any) => (
                   <tr key={r.country} className="border-b border-border">
                     <td className="px-2 py-1.5">{r.country}</td>
                     <td className="px-2 py-1.5">{r.nationality}</td>
@@ -449,7 +449,7 @@ function Section1B() {
         <p className="mt-1 text-xs text-muted-foreground">{partB.instructions}</p>
 
         <ol className="mt-4 space-y-4">
-          {partB.exercises.map((q) => (
+          {partB.exercises.map((q: any) => (
             <li key={q.question_number} className="rounded-xl border border-border bg-background p-3">
               <div className="flex gap-2">
                 <span className="text-sm font-bold text-primary">{q.question_number}.</span>
@@ -567,7 +567,7 @@ function Section1C() {
         <p className="mt-1 text-xs text-muted-foreground">{partA.instructions}</p>
 
         <ol className="mt-4 space-y-4">
-          {partA.exercises.map((q) => (
+          {partA.exercises.map((q: any) => (
             <li key={q.question_number} className="rounded-xl border border-border bg-background p-3">
               <div className="flex gap-2">
                 <span className="text-sm font-bold text-primary">{q.question_number}.</span>
