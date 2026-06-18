@@ -219,9 +219,9 @@ function AnswerTryBox({
 /* ------------------------------------------------------------------ */
 
 function Section1A() {
-  const data = unit1.sections[0]; // 1A
-  const passage = data.reading_passage!;
-  const comp = data.comprehension!;
+  const data = unit1.sections[0] as any; // 1A
+  const passage = data.reading_passage;
+  const comp = data.comprehension;
 
   const [showFullMy, setShowFullMy] = useState(false);
 
@@ -384,9 +384,9 @@ function ExerciseGroup({
 /* ------------------------------------------------------------------ */
 
 function Section1B() {
-  const data = unit1.sections[1]; // 1B
-  const partB = data.part_B!;
-  const partA = data.part_A!;
+  const data = unit1.sections[1] as any; // 1B
+  const partB = data.part_B;
+  const partA = data.part_A;
 
   return (
     <div className="space-y-6">
@@ -497,8 +497,8 @@ function VocabCard({ item }: { item: { word: string; pronunciation: string; mean
 /* ------------------------------------------------------------------ */
 
 function Section1C() {
-  const data = unit1.sections[2]; // 1C
-  const partA = data.part_A!;
+  const data = unit1.sections[2] as any; // 1C
+  const partA = data.part_A;
 
   return (
     <div className="space-y-6">

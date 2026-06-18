@@ -42,11 +42,12 @@ function LessonsPage() {
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {unit1.lessons.map((lesson, i) => {
             const Icon = ICONS[i % ICONS.length];
+            const sectionId = lesson.code.toLowerCase();
             return (
               <Link
                 key={lesson.id}
-                to="/lesson/$lessonId"
-                params={{ lessonId: lesson.id }}
+                to="/section/$sectionId"
+                params={{ sectionId }}
                 className="group relative flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition hover:border-primary/40 hover:shadow-md"
               >
                 <div className="flex items-center justify-between">
@@ -66,10 +67,7 @@ function LessonsPage() {
                 </div>
                 <div className="mt-auto flex items-center gap-2 text-xs text-muted-foreground">
                   <MessageCircle className="h-3.5 w-3.5" />
-                  {lesson.questions.length}
-                  {lang === "my" ? " မေးခွန်း + " : " questions + "}
-                  {lesson.bonusQuestions.length}
-                  {lang === "my" ? " bonus" : " bonus"}
+                  {lang === "my" ? "အပြန်အလှန် လေ့ကျင့်ခန်းများ" : "Interactive exercises"}
                 </div>
               </Link>
             );
