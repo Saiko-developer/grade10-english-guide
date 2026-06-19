@@ -29,7 +29,14 @@ import {
   partC1A_translations,
   vocab1B,
 } from "@/data/unit1Supplement";
-import { analyzeQuestion } from "@/lib/sentenceStructure";
+import { analyzeQuestion, TAG_INFO, translateChunkMy } from "@/lib/sentenceStructure";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 type SectionId = "1a" | "1b" | "1c";
 
@@ -123,20 +130,70 @@ function ToggleReveal({
 
 function StructureBreakdown({ questionText }: { questionText: string }) {
   const result = useMemo(() => analyzeQuestion(questionText), [questionText]);
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const info = activeTag ? TAG_INFO[activeTag] : null;
+
   return (
     <div>
-      <p className="font-semibold">{result.intro}</p>
-      <p className="text-muted-foreground">{result.introMy}</p>
-      <ol className="mt-2 space-y-1.5">
-        {result.tokens.map((t, i) => (
-          <li key={i} className="flex flex-wrap items-baseline gap-2">
-            <span className="rounded bg-white/70 dark:bg-black/30 px-1.5 py-0.5 font-mono text-xs">{t.text}</span>
-            <span className="text-xs text-muted-foreground">→ {t.role}</span>
-            <span className="text-xs">· {t.roleMy}</span>
-          </li>
-        ))}
-      </ol>
-      <p className="mt-2 text-xs italic text-muted-foreground">📐 {result.noteMy}</p>
+      {/* Header */}
+      <h3 className="text-base font-bold leading-snug">
+        🚂 Sentence: <span className="italic">"{result.sentence}"</span>
+      </h3>
+      <p className="mt-1 text-xs text-muted-foreground">{result.introMy}</p>
+
+      {/* Inline train of cars */}
+      <div className="mt-3 flex flex-wrap items-stretch gap-2">
+        {result.tokens.map((t, i) => {
+          const my = translateChunkMy(t.text);
+          return (
+            <div key={i} className="flex items-center gap-1.5">
+              <div className="flex min-w-[7rem] flex-col items-center rounded-xl border-2 border-primary/40 bg-white px-3 py-2 text-center shadow-sm dark:bg-background">
+                <span className="text-sm font-bold leading-tight">{t.text}</span>
+                <span className="mt-0.5 text-[11px] text-muted-foreground leading-tight">({my})</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveTag(t.tag)}
+                  className="mt-1 rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary hover:bg-primary/20"
+                  aria-label={`Explain ${t.tag}`}
+                >
+                  [{t.tag}]
+                </button>
+              </div>
+              {i < result.tokens.length - 1 && (
+                <span className="text-base font-bold text-primary/60" aria-hidden>
+                  ➔
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="mt-3 text-xs italic text-muted-foreground">📐 {result.noteMy}</p>
+
+      {/* Right-side drawer for tag explanation */}
+      <Sheet open={!!activeTag} onOpenChange={(o) => !o && setActiveTag(null)}>
+        <SheetContent side="right" className="w-[88vw] sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{info ? info.titleMy : ""}</SheetTitle>
+            <SheetDescription className="text-xs font-mono">[{activeTag}]</SheetDescription>
+          </SheetHeader>
+          {info && (
+            <div className="mt-4 space-y-3 text-sm leading-relaxed">
+              <p>{info.bodyMy}</p>
+              {info.example && (
+                <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-amber-900 dark:bg-amber-950/30 dark:text-amber-100">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider">Example</p>
+                  <p className="mt-1 font-medium">{info.example}</p>
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                🦉 ဆရာ ဇီးကွက် — ဒီအပိုင်းကို နားလည်ပြီးရင် မေးခွန်းကို ပြန်ကြိုးစားကြည့်ပါ။
+              </p>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
