@@ -234,13 +234,29 @@ const WORD_MY: Record<string, string> = {
 
 export function translateChunkMy(chunk: string): string {
   const norm = chunk.toLowerCase().replace(/[.,!?;:"'`']/g, "").trim();
-  if (!norm) return "????";
+  if (!norm) return "—";
   if (PHRASE_MY[norm]) return PHRASE_MY[norm];
 
   const parts = norm.split(/\s+/).filter(Boolean);
-  const mapped = parts.map((p) => WORD_MY[p] ?? "❓");
-  if (mapped.every((m) => m === "❓")) return "????";
+  const mapped = parts.map((p) => WORD_MY[p] ?? p);
   return mapped.join(" ");
+}
+
+// Structured "train car" data for the visual sentence-structure breakdown.
+export type TrainCar = {
+  word: string;
+  translation: string;
+  tag: string;
+};
+
+export function buildTrainCars(sentence: string): { sentence: string; cars: TrainCar[]; introMy: string; noteMy: string } {
+  const result = analyzeQuestion(sentence);
+  const cars: TrainCar[] = result.tokens.map((t) => ({
+    word: t.text,
+    translation: translateChunkMy(t.text),
+    tag: t.tag,
+  }));
+  return { sentence: result.sentence, cars, introMy: result.introMy, noteMy: result.noteMy };
 }
 
 export const TAG_INFO: Record<string, { titleMy: string; bodyMy: string; example?: string }> = {
