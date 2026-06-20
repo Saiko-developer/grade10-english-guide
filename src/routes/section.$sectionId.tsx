@@ -29,7 +29,7 @@ import {
   partC1A_translations,
   vocab1B,
 } from "@/data/unit1Supplement";
-import { analyzeQuestion, TAG_INFO, translateChunkMy } from "@/lib/sentenceStructure";
+import { buildTrainCars, TAG_INFO } from "@/lib/sentenceStructure";
 import {
   Sheet,
   SheetContent,
@@ -129,7 +129,10 @@ function ToggleReveal({
 }
 
 function StructureBreakdown({ questionText }: { questionText: string }) {
-  const result = useMemo(() => analyzeQuestion(questionText), [questionText]);
+  const { sentence, cars, introMy, noteMy } = useMemo(
+    () => buildTrainCars(questionText),
+    [questionText],
+  );
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const info = activeTag ? TAG_INFO[activeTag] : null;
 
@@ -137,35 +140,36 @@ function StructureBreakdown({ questionText }: { questionText: string }) {
     <div>
       {/* Header */}
       <h3 className="text-base font-bold leading-snug">
-        🚂 Sentence: <span className="italic">"{result.sentence}"</span>
+        🚂 Sentence: <span className="italic">"{sentence}"</span>
       </h3>
-      <p className="mt-1 text-xs text-muted-foreground">{result.introMy}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{introMy}</p>
 
       {/* Inline train of cars — wraps naturally on mobile */}
-      <div className="mt-4 flex w-full flex-wrap items-center gap-y-6 gap-x-2">
-        {result.tokens.map((t, i) => {
-          const my = translateChunkMy(t.text);
-          return (
-            <div
-              key={i}
-              className="flex min-w-[7rem] flex-1 basis-[7rem] flex-col items-center rounded-xl border-2 border-primary/40 bg-white px-3 py-2 text-center shadow-sm dark:bg-background"
+      <div className="mt-4 flex flex-wrap items-center gap-y-6 gap-x-2 w-full">
+        {cars.map((car, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center justify-center p-3 border border-slate-200 rounded-lg bg-slate-50"
+          >
+            <span className="text-sm font-bold leading-tight text-slate-900">
+              {car.word}
+            </span>
+            <span className="mt-1 text-[11px] leading-tight text-slate-600">
+              ({car.translation})
+            </span>
+            <button
+              type="button"
+              onClick={() => setActiveTag(car.tag)}
+              className="mt-1.5 rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary hover:bg-primary/20"
+              aria-label={`Explain ${car.tag}`}
             >
-              <span className="text-sm font-bold leading-tight">{t.text}</span>
-              <span className="mt-1 text-[11px] text-muted-foreground leading-tight">({my})</span>
-              <button
-                type="button"
-                onClick={() => setActiveTag(t.tag)}
-                className="mt-1.5 rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary hover:bg-primary/20"
-                aria-label={`Explain ${t.tag}`}
-              >
-                [{t.tag}]
-              </button>
-            </div>
-          );
-        })}
+              [{car.tag}]
+            </button>
+          </div>
+        ))}
       </div>
 
-      <p className="mt-4 text-xs italic text-muted-foreground">📐 {result.noteMy}</p>
+      <p className="mt-4 text-xs italic text-muted-foreground">📐 {noteMy}</p>
 
       {/* Right-side drawer for tag explanation */}
       <Sheet open={!!activeTag} onOpenChange={(o) => !o && setActiveTag(null)}>
