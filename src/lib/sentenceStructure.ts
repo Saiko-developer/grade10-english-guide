@@ -208,6 +208,9 @@ const PHRASE_MY: Record<string, string> = {
   "your name": "သင့်နာမည်",
   "your country": "သင့်နိုင်ငံ",
   "in english": "အင်္ဂလိပ်လို",
+  // Add this exact block below for the dynamic question phrase:
+  "to learn any other foreign language apart from English? Why": "သို့မဟုတ် အင်္ဂလိပ်ဘာသာစကားမှလွဲ၍ အခြားနိုင်ငံခြားဘာသာစကားကို သင်ယူလိုပါသလား။ ဘာကြောင့်လဲ။",
+  "to learn any other foreign language apart from english why": "သို့မဟုတ် အင်္ဂလိပ်ဘာသာစကားမှလွဲ၍ အခြားနိုင်ငံခြားဘာသာစကားကို သင်ယူလိုပါသလား။ ဘာကြောင့်လဲ။"
 };
 
 const WORD_MY: Record<string, string> = {
