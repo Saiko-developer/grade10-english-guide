@@ -141,35 +141,31 @@ function StructureBreakdown({ questionText }: { questionText: string }) {
       </h3>
       <p className="mt-1 text-xs text-muted-foreground">{result.introMy}</p>
 
-      {/* Inline train of cars */}
-      <div className="mt-3 flex flex-wrap items-stretch gap-2">
+      {/* Inline train of cars — wraps naturally on mobile */}
+      <div className="mt-4 flex w-full flex-wrap items-center gap-y-6 gap-x-2">
         {result.tokens.map((t, i) => {
           const my = translateChunkMy(t.text);
           return (
-            <div key={i} className="flex items-center gap-1.5">
-              <div className="flex min-w-[7rem] flex-col items-center rounded-xl border-2 border-primary/40 bg-white px-3 py-2 text-center shadow-sm dark:bg-background">
-                <span className="text-sm font-bold leading-tight">{t.text}</span>
-                <span className="mt-0.5 text-[11px] text-muted-foreground leading-tight">({my})</span>
-                <button
-                  type="button"
-                  onClick={() => setActiveTag(t.tag)}
-                  className="mt-1 rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary hover:bg-primary/20"
-                  aria-label={`Explain ${t.tag}`}
-                >
-                  [{t.tag}]
-                </button>
-              </div>
-              {i < result.tokens.length - 1 && (
-                <span className="text-base font-bold text-primary/60" aria-hidden>
-                  ➔
-                </span>
-              )}
+            <div
+              key={i}
+              className="flex min-w-[7rem] flex-1 basis-[7rem] flex-col items-center rounded-xl border-2 border-primary/40 bg-white px-3 py-2 text-center shadow-sm dark:bg-background"
+            >
+              <span className="text-sm font-bold leading-tight">{t.text}</span>
+              <span className="mt-1 text-[11px] text-muted-foreground leading-tight">({my})</span>
+              <button
+                type="button"
+                onClick={() => setActiveTag(t.tag)}
+                className="mt-1.5 rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary hover:bg-primary/20"
+                aria-label={`Explain ${t.tag}`}
+              >
+                [{t.tag}]
+              </button>
             </div>
           );
         })}
       </div>
 
-      <p className="mt-3 text-xs italic text-muted-foreground">📐 {result.noteMy}</p>
+      <p className="mt-4 text-xs italic text-muted-foreground">📐 {result.noteMy}</p>
 
       {/* Right-side drawer for tag explanation */}
       <Sheet open={!!activeTag} onOpenChange={(o) => !o && setActiveTag(null)}>
