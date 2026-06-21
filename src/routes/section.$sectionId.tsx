@@ -397,11 +397,13 @@ function ExerciseGroup({
   titleMy,
   instructions,
   items,
+  enableStructure = true,
 }: {
   title: string;
   titleMy: string;
   instructions: string;
   items: ExItem[];
+  enableStructure?: boolean;
 }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
@@ -423,9 +425,11 @@ function ExerciseGroup({
               <ToggleReveal label="Translate Question" icon={Languages}>
                 {q.translation || "မြန်မာ ဘာသာပြန် မရရှိနိုင်ပါ။"}
               </ToggleReveal>
-              <ToggleReveal label="Sentence Structure" icon={Sparkles} tone="primary">
-                <StructureBreakdown questionText={q.text.replace(/^"|"$/g, "")} />
-              </ToggleReveal>
+              {enableStructure && (
+                <ToggleReveal label="Sentence Structure" icon={Sparkles} tone="primary">
+                  <StructureBreakdown questionText={q.text.replace(/^"|"$/g, "")} />
+                </ToggleReveal>
+              )}
             </div>
 
             <AnswerTryBox correct={q.answer} />
