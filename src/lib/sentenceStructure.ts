@@ -415,6 +415,11 @@ export const TAG_INFO: Record<string, { titleMy: string; bodyMy: string; example
     bodyMy: "ကံတ္တားအကြောင်း ပြောတဲ့ ဝါကျ၏ ကျန်အပိုင်း — ကြိယာနဲ့ ကံ/ဖြည့်စွက်စာ ပေါင်းထားတယ်။",
     example: "The boy [is running fast].",
   },
+  "Complement": {
+    titleMy: "ဖြည့်စွက်စာ (Complement)",
+    bodyMy: "be-ကြိယာ (is/am/are/was/were) နောက်မှာ လာတဲ့ အပိုင်း — ကံတ္တားကို ပြန်ဖော်ပြ၊ ဖြည့်စွက်ပေးတယ်။ ('Object' မဟုတ်ပါ)",
+    example: "She is a teacher. → 'a teacher' က Complement။",
+  },
   "Sentence": {
     titleMy: "ဝါကျ (Sentence)",
     bodyMy: "အပြည့်အစုံ အဓိပ္ပာယ်ရှိတဲ့ စကားစု — ကံတ္တား + ကြိယာ ပါဝင်တယ်။",
