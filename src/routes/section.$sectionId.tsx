@@ -346,6 +346,7 @@ function Section1A() {
           title="Exercise C — Function of each utterance"
           titleMy="လေ့ကျင့်ခန်း C — စကားလုံးတစ်ခုစီ၏ လုပ်ဆောင်ချက်"
           instructions={comp.part_C.instructions}
+          enableStructure={false}
           items={comp.part_C.exercises.map((e: any) => ({
             id: e.question_number,
             text: `"${e.utterance}"`,
