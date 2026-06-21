@@ -52,9 +52,28 @@ function isNounish(w: string): boolean {
   return !ARTICLES.has(lw) && !ADJ.has(lw) && !PREPS.has(lw) && !AUX.has(lw) && !WH[lw];
 }
 
+// Consume a noun phrase: optional article + adjectives + 1–3 nouns.
+// Returns [endIndex, hadAdjective].
+function consumeNounPhrase(words: string[], start: number): { end: number; hasAdj: boolean } {
+  let i = start;
+  let hasAdj = false;
+  if (i < words.length && ARTICLES.has(words[i].toLowerCase())) i++;
+  while (i < words.length && ADJ.has(words[i].toLowerCase())) {
+    hasAdj = true;
+    i++;
+  }
+  const nounStart = i;
+  while (i < words.length && i < nounStart + 3 && isNounish(words[i])) {
+    i++;
+    if (i < words.length && (PREPS.has(words[i].toLowerCase()) || AUX.has(words[i].toLowerCase()))) break;
+  }
+  return { end: i, hasAdj };
+}
+
 export function analyzeQuestion(raw: string): { sentence: string; intro: string; introMy: string; tokens: Token[]; noteMy: string } {
   const cleaned = raw.trim().replace(/[?.!]+$/, "");
   const sentence = raw.trim();
+  const isQuestion = /\?\s*$/.test(raw.trim());
   const words = cleaned.split(/\s+/);
   if (words.length === 0) {
     return { sentence, intro: "", introMy: "", tokens: [], noteMy: "" };
@@ -64,63 +83,39 @@ export function analyzeQuestion(raw: string): { sentence: string; intro: string;
   const tokens: Token[] = [];
 
   // ---------- WH-question ----------
-  if (WH[first]) {
+  if (WH[first] && isQuestion) {
     const info = WH[first];
     tokens.push({ text: words[0], role: `WH-word — ${info.role}`, roleMy: `WH စကားလုံး — ${info.roleMy}`, tag: info.tag });
 
     let i = 1;
-    // optional aux / linking verb
+    let isBe = false;
+    // helping / linking verb
     if (i < words.length && AUX.has(words[i].toLowerCase())) {
       const w = words[i].toLowerCase();
+      isBe = BE.has(w);
       tokens.push({
         text: words[i],
-        role: BE.has(w) ? "linking verb (be-form)" : "helping (auxiliary) verb",
-        roleMy: BE.has(w) ? "ဆက်စပ်ကြိယာ" : AUX_MY[w] ?? "အကူကြိယာ",
-        tag: BE.has(w) ? "Linking Verb" : "Helping Verb",
+        role: isBe ? "linking verb (be-form)" : "helping (auxiliary) verb",
+        roleMy: isBe ? "ဆက်စပ်ကြိယာ" : AUX_MY[w] ?? "အကူကြိယာ",
+        tag: isBe ? "Linking Verb" : "Helping Verb",
       });
       i++;
     }
 
-    // adjective phrase (article + adjective(s)) before the noun subject
-    const adjStart = i;
-    while (
-      i < words.length &&
-      (ARTICLES.has(words[i].toLowerCase()) || ADJ.has(words[i].toLowerCase()))
-    ) {
-      i++;
-    }
-    if (i > adjStart) {
-      const chunk = words.slice(adjStart, i).join(" ");
-      const hasAdj = words.slice(adjStart, i).some((w) => ADJ.has(w.toLowerCase()));
-      if (hasAdj) {
-        tokens.push({
-          text: chunk,
-          role: "Adjective phrase (describes the noun)",
-          roleMy: "နာမဝိသေသန စကားစု (နာမ်ကို ဖော်ပြ)",
-          tag: "Adjective Phrase",
-        });
-      } else {
-        // only article(s) — fold into the noun by stepping back
-        i = adjStart;
-      }
-    }
-
-    // noun subject — take the next 1–2 nounish words
-    const subjStart = i;
-    while (i < words.length && i < subjStart + 2 && isNounish(words[i])) {
-      i++;
-      if (i < words.length && PREPS.has(words[i].toLowerCase())) break;
-    }
-    if (i > subjStart) {
+    // Subject noun phrase
+    const np = consumeNounPhrase(words, i);
+    if (np.end > i) {
+      const chunk = words.slice(i, np.end).join(" ");
       tokens.push({
-        text: words.slice(subjStart, i).join(" "),
+        text: chunk,
         role: "Subject (who/what the question is about)",
         roleMy: "ကံတ္တား (ဘယ်သူ/ဘာအကြောင်းလဲ)",
         tag: "Noun Subject",
       });
+      i = np.end;
     }
 
-    // prepositional phrase — preposition + rest
+    // Prepositional phrase short-circuit
     if (i < words.length && PREPS.has(words[i].toLowerCase())) {
       tokens.push({
         text: words.slice(i).join(" "),
@@ -130,21 +125,46 @@ export function analyzeQuestion(raw: string): { sentence: string; intro: string;
       });
       i = words.length;
     } else if (i < words.length) {
-      // main verb + remainder fallback
-      tokens.push({
-        text: words[i],
-        role: "Main verb (the action)",
-        roleMy: "မူရင်းကြိယာ (လုပ်ဆောင်ချက်)",
-        tag: "Main Verb",
-      });
-      i++;
-      if (i < words.length) {
+      if (isBe) {
+        // After a be-verb: remainder is a Complement, never an Object.
         tokens.push({
           text: words.slice(i).join(" "),
-          role: "Object / Complement (the rest)",
-          roleMy: "ကံ / ဖြည့်စွက်အပိုင်း",
-          tag: "Noun Object",
+          role: "Complement (completes the meaning of the be-verb)",
+          roleMy: "ဖြည့်စွက်စာ (be-ကြိယာ၏ အဓိပ္ပါယ်ကို ဖြည့်ပေး)",
+          tag: "Complement",
         });
+      } else {
+        // Find the first verb-like word (skip articles/adjectives — they fold into the next noun).
+        let v = i;
+        while (v < words.length && (ARTICLES.has(words[v].toLowerCase()) || ADJ.has(words[v].toLowerCase()))) v++;
+        if (v < words.length) {
+          tokens.push({
+            text: words[v],
+            role: "Main verb (the action)",
+            roleMy: "မူရင်းကြိယာ (လုပ်ဆောင်ချက်)",
+            tag: "Main Verb",
+          });
+          const rest = words.slice(v + 1).join(" ").trim();
+          // If we skipped articles/adjectives before the verb, glue them onto the rest as object.
+          const skipped = words.slice(i, v).join(" ").trim();
+          const objText = [skipped, rest].filter(Boolean).join(" ").trim();
+          if (objText) {
+            tokens.push({
+              text: objText,
+              role: "Object / Complement (the rest)",
+              roleMy: "ကံ / ဖြည့်စွက်အပိုင်း",
+              tag: "Noun Object",
+            });
+          }
+        } else {
+          // No verb found — treat remainder as complement.
+          tokens.push({
+            text: words.slice(i).join(" "),
+            role: "Complement (the rest)",
+            roleMy: "ဖြည့်စွက်အပိုင်း",
+            tag: "Complement",
+          });
+        }
       }
     }
 
@@ -153,45 +173,118 @@ export function analyzeQuestion(raw: string): { sentence: string; intro: string;
       intro: `This is a Wh-question starting with "${words[0]}".`,
       introMy: `ဒီမေးခွန်းက "${words[0]}" နဲ့ စတဲ့ Wh-question မေးခွန်းပါ။`,
       tokens,
-      noteMy: `ပုံစံ: WH-word → အကူ/be-ကြိယာ → နာမဝိသေသနစု → ကံတ္တား → ဝိဘတ်စကားစု။`,
+      noteMy: isBe
+        ? "ပုံစံ: WH-word → be-ကြိယာ → ကံတ္တား → ဖြည့်စွက်စာ ။"
+        : "ပုံစံ: WH-word → အကူကြိယာ → ကံတ္တား → မူရင်းကြိယာ → ကံ ။",
     };
   }
 
   // ---------- Yes/No question ----------
-  if (AUX.has(first)) {
+  if (AUX.has(first) && isQuestion) {
     const w = first;
+    const isBe = BE.has(w);
     tokens.push({
       text: words[0],
-      role: BE.has(w) ? "Linking verb (be-form) at start = Yes/No question" : "Auxiliary at start = Yes/No question",
-      roleMy: BE.has(w) ? "ဝါကျရှေ့ be-ကြိယာ → ဟုတ်/မဟုတ် မေးခွန်း" : "ဝါကျရှေ့ အကူကြိယာ → ဟုတ်/မဟုတ် မေးခွန်း",
-      tag: BE.has(w) ? "Linking Verb" : "Helping Verb",
+      role: isBe ? "Linking verb (be-form) at start = Yes/No question" : "Auxiliary at start = Yes/No question",
+      roleMy: isBe ? "ဝါကျရှေ့ be-ကြိယာ → ဟုတ်/မဟုတ် မေးခွန်း" : "ဝါကျရှေ့ အကူကြိယာ → ဟုတ်/မဟုတ် မေးခွန်း",
+      tag: isBe ? "Linking Verb" : "Helping Verb",
     });
     let i = 1;
-    const subjStart = i;
-    while (i < words.length && i < subjStart + 2 && isNounish(words[i])) i++;
-    if (i > subjStart) {
-      tokens.push({ text: words.slice(subjStart, i).join(" "), role: "Subject", roleMy: "ကံတ္တား", tag: "Noun Subject" });
+    const np = consumeNounPhrase(words, i);
+    if (np.end > i) {
+      tokens.push({ text: words.slice(i, np.end).join(" "), role: "Subject", roleMy: "ကံတ္တား", tag: "Noun Subject" });
+      i = np.end;
     }
     if (i < words.length) {
-      tokens.push({ text: words.slice(i).join(" "), role: "Predicate (main verb + rest)", roleMy: "ကြိယာပိုင်း", tag: "Predicate" });
+      tokens.push({
+        text: words.slice(i).join(" "),
+        role: isBe ? "Complement" : "Predicate (main verb + rest)",
+        roleMy: isBe ? "ဖြည့်စွက်စာ" : "ကြိယာပိုင်း",
+        tag: isBe ? "Complement" : "Predicate",
+      });
     }
     return {
       sentence,
       intro: "This is a Yes/No question.",
       introMy: "ဒီမေးခွန်းက ဟုတ်/မဟုတ် မေးခွန်းပါ။",
       tokens,
-      noteMy: "ပုံစံ: အကူ/be-ကြိယာ → ကံတ္တား → ကြိယာပိုင်း။",
+      noteMy: "ပုံစံ: အကူ/be-ကြိယာ → ကံတ္တား → ကြိယာပိုင်း ။",
     };
   }
 
-  // ---------- Statement / fill-in fallback ----------
-  tokens.push({ text: cleaned, role: "Statement / fill-in sentence", roleMy: "ဝါကျ / ဖြည့်စွက်ရန် ဝါကျ", tag: "Sentence" });
+  // ---------- Declarative / fill-in sentence ----------
+  // Subject noun phrase
+  let i = 0;
+  const subj = consumeNounPhrase(words, i);
+  if (subj.end > i) {
+    tokens.push({
+      text: words.slice(i, subj.end).join(" "),
+      role: "Subject",
+      roleMy: "ကံတ္တား",
+      tag: "Noun Subject",
+    });
+    i = subj.end;
+  }
+
+  // Verb
+  if (i < words.length && AUX.has(words[i].toLowerCase())) {
+    const w = words[i].toLowerCase();
+    const isBe = BE.has(w);
+    tokens.push({
+      text: words[i],
+      role: isBe ? "Linking verb (be-form)" : "Helping verb",
+      roleMy: isBe ? "ဆက်စပ်ကြိယာ" : AUX_MY[w] ?? "အကူကြိယာ",
+      tag: isBe ? "Linking Verb" : "Helping Verb",
+    });
+    i++;
+    if (i < words.length) {
+      tokens.push({
+        text: words.slice(i).join(" "),
+        role: isBe ? "Complement (completes the be-verb)" : "Predicate (rest of the sentence)",
+        roleMy: isBe ? "ဖြည့်စွက်စာ (be-ကြိယာ၏ အဓိပ္ပါယ်ကို ဖြည့်)" : "ကြိယာပိုင်း",
+        tag: isBe ? "Complement" : "Predicate",
+      });
+    }
+    return {
+      sentence,
+      intro: isBe ? "This is a declarative sentence with a linking (be) verb." : "This is a declarative sentence.",
+      introMy: isBe ? "ဒါက be-ကြိယာသုံး ပြောကြားချက် ဝါကျပါ။" : "ဒါက ပြောကြားချက် ဝါကျ ဖြစ်ပါတယ်။",
+      tokens,
+      noteMy: isBe
+        ? "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Verb) → ဖြည့်စွက်စာ (Complement) ။"
+        : "ပုံစံ: ကံတ္တား → အကူကြိယာ → ကြိယာပိုင်း ။",
+    };
+  }
+
+  if (i < words.length) {
+    // No be/aux verb found — treat next word as main verb.
+    tokens.push({
+      text: words[i],
+      role: "Main verb",
+      roleMy: "မူရင်းကြိယာ",
+      tag: "Main Verb",
+    });
+    i++;
+    if (i < words.length) {
+      tokens.push({
+        text: words.slice(i).join(" "),
+        role: "Object / Complement",
+        roleMy: "ကံ / ဖြည့်စွက်အပိုင်း",
+        tag: "Noun Object",
+      });
+    }
+  }
+
+  if (tokens.length === 0) {
+    tokens.push({ text: cleaned, role: "Sentence", roleMy: "ဝါကျ", tag: "Sentence" });
+  }
+
   return {
     sentence,
     intro: "This looks like a statement to complete.",
-    introMy: "ဒါက ဖြည့်စွက်ရမယ့် ဝါကျ ပုံစံ ဖြစ်ပါတယ်။",
+    introMy: "ဒါက ဖြည့်စွက်ရမယ့် ဝါကျ ဖြစ်ပါတယ်။",
     tokens,
-    noteMy: "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Verb) → ကံ (Object) ။",
+    noteMy: "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Verb) → ကံ/ဖြည့်စွက်စာ ။",
   };
 }
 
@@ -321,6 +414,11 @@ export const TAG_INFO: Record<string, { titleMy: string; bodyMy: string; example
     titleMy: "ကြိယာပိုင်း (Predicate)",
     bodyMy: "ကံတ္တားအကြောင်း ပြောတဲ့ ဝါကျ၏ ကျန်အပိုင်း — ကြိယာနဲ့ ကံ/ဖြည့်စွက်စာ ပေါင်းထားတယ်။",
     example: "The boy [is running fast].",
+  },
+  "Complement": {
+    titleMy: "ဖြည့်စွက်စာ (Complement)",
+    bodyMy: "be-ကြိယာ (is/am/are/was/were) နောက်မှာ လာတဲ့ အပိုင်း — ကံတ္တားကို ပြန်ဖော်ပြ၊ ဖြည့်စွက်ပေးတယ်။ ('Object' မဟုတ်ပါ)",
+    example: "She is a teacher. → 'a teacher' က Complement။",
   },
   "Sentence": {
     titleMy: "ဝါကျ (Sentence)",

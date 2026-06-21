@@ -346,6 +346,7 @@ function Section1A() {
           title="Exercise C — Function of each utterance"
           titleMy="လေ့ကျင့်ခန်း C — စကားလုံးတစ်ခုစီ၏ လုပ်ဆောင်ချက်"
           instructions={comp.part_C.instructions}
+          enableStructure={false}
           items={comp.part_C.exercises.map((e: any) => ({
             id: e.question_number,
             text: `"${e.utterance}"`,
@@ -396,11 +397,13 @@ function ExerciseGroup({
   titleMy,
   instructions,
   items,
+  enableStructure = true,
 }: {
   title: string;
   titleMy: string;
   instructions: string;
   items: ExItem[];
+  enableStructure?: boolean;
 }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
@@ -422,9 +425,11 @@ function ExerciseGroup({
               <ToggleReveal label="Translate Question" icon={Languages}>
                 {q.translation || "မြန်မာ ဘာသာပြန် မရရှိနိုင်ပါ။"}
               </ToggleReveal>
-              <ToggleReveal label="Sentence Structure" icon={Sparkles} tone="primary">
-                <StructureBreakdown questionText={q.text.replace(/^"|"$/g, "")} />
-              </ToggleReveal>
+              {enableStructure && (
+                <ToggleReveal label="Sentence Structure" icon={Sparkles} tone="primary">
+                  <StructureBreakdown questionText={q.text.replace(/^"|"$/g, "")} />
+                </ToggleReveal>
+              )}
             </div>
 
             <AnswerTryBox correct={q.answer} />
