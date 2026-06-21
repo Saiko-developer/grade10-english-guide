@@ -346,6 +346,19 @@ export type TrainCar = {
 };
 
 export function buildTrainCars(sentence: string): { sentence: string; cars: TrainCar[]; introMy: string; noteMy: string } {
+  // Hardcoded overrides for sentences the generic parser cannot split cleanly
+  // (e.g. infinitive "to" inside the subject or predicate). Keys are normalized:
+  // lowercased, blanks collapsed to "_", trailing punctuation removed.
+  const override = SENTENCE_OVERRIDES[normalizeSentenceKey(sentence)];
+  if (override) {
+    return {
+      sentence: sentence.trim(),
+      cars: override.cars,
+      introMy: override.introMy,
+      noteMy: override.noteMy,
+    };
+  }
+
   const result = analyzeQuestion(sentence);
   const cars: TrainCar[] = result.tokens.map((t) => ({
     word: t.text,
@@ -354,6 +367,48 @@ export function buildTrainCars(sentence: string): { sentence: string; cars: Trai
   }));
   return { sentence: result.sentence, cars, introMy: result.introMy, noteMy: result.noteMy };
 }
+
+function normalizeSentenceKey(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/_+/g, "_")
+    .replace(/\s+/g, " ")
+    .replace(/[.?!]+$/, "")
+    .trim();
+}
+
+type Override = { cars: TrainCar[]; introMy: string; noteMy: string };
+
+const SENTENCE_OVERRIDES: Record<string, Override> = {
+  "the first language skill to develop is _": {
+    cars: [
+      {
+        word: "The first language skill to develop",
+        translation: "ဘာသာစကားစွမ်းရည် တိုးတက်အောင် ပထမဆုံး လုပ်ဆောင်ရမည့်အရာမှာ",
+        tag: "Noun Subject",
+      },
+      { word: "is", translation: "ဖြစ်သည်", tag: "Main Verb" },
+      { word: "_______", translation: "_______", tag: "Complement" },
+    ],
+    introMy: "ဒါက Subject → Verb → Complement ပုံစံ ပြောကြားချက် ဝါကျပါ။",
+    noteMy: "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Verb \"is\") → ဖြည့်စွက်စာ (Complement) ။",
+  },
+  "a baby begins to speak at the age of _": {
+    cars: [
+      { word: "A baby", translation: "ကလေးငယ်တစ်ဦးသည်", tag: "Noun Subject" },
+      { word: "begins", translation: "စတင်သည်", tag: "Main Verb" },
+      {
+        word: "to speak at the age of _______",
+        translation: "_______ အသက်အရွယ်တွင် စကားပြောရန်",
+        tag: "Noun Object",
+      },
+    ],
+    introMy:
+      "ဒါက Subject → Verb → Object ပုံစံ ပြောကြားချက် ဝါကျပါ။ \"begins to speak\" သည် ပေါင်းစပ်ကြိယာဖြစ်ပြီး \"begins\" သာ Main Verb ဖြစ်သည်။",
+    noteMy:
+      "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Verb \"begins\") → ကံ (Object) ။ \"to\" ကို တစ်ခုတည်း Main Verb အဖြစ် မထုတ်ပါ။",
+  },
+};
 
 export const TAG_INFO: Record<string, { titleMy: string; bodyMy: string; example?: string }> = {
   "WH-Question Word": {
