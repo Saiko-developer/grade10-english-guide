@@ -106,7 +106,7 @@ export const grammar1C = {
     { en: "My son, a musician, lives with me.", apposition: "a musician" },
   ],
   // A short, freely-embeddable English-grammar video on appositives
-  youtubeId: "https://youtu.be/_EMwmoJ4kLE?si=5NiKXXWIKpWgxMkC",
+  youtubeId: "1sZxmRrUmwM",
   youtubeTitle: "Appositives — English Grammar Explained",
   subtitleNoteMy: "မြန်မာ စာတန်းထိုး — မကြာမီ ထည့်ပေးပါမည်။",
 };
