@@ -343,6 +343,7 @@ function Section1A() {
             text: e.text,
             translation: partA1A_translations[e.question_number] ?? "",
             answer: e.answer,
+            breakdown: partA1A_breakdowns[e.question_number],
           }))}
         />
 
@@ -355,6 +356,7 @@ function Section1A() {
             text: e.question,
             translation: partB1A_translations[e.question_number] ?? "",
             answer: e.answer,
+            breakdown: partB1A_breakdowns[e.question_number],
           }))}
         />
 
