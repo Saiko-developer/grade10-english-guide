@@ -22,14 +22,17 @@ import { Input } from "@/components/ui/input";
 import unit1 from "@/data/textbookUnit1.json";
 import {
   grammar1C,
+  partA1A_breakdowns,
   partA1A_translations,
   partA1C_translations,
+  partB1A_breakdowns,
   partB1A_translations,
   partB1B_translations,
   partC1A_translations,
   vocab1B,
+  type SentenceBreakdown,
 } from "@/data/unit1Supplement";
-import { buildTrainCars, TAG_INFO } from "@/lib/sentenceStructure";
+import { TAG_INFO } from "@/lib/sentenceStructure";
 import {
   Sheet,
   SheetContent,
