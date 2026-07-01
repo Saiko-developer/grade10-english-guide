@@ -408,7 +408,13 @@ function ParagraphBlock({
   );
 }
 
-type ExItem = { id: number; text: string; translation: string; answer: string };
+type ExItem = {
+  id: number;
+  text: string;
+  translation: string;
+  answer: string;
+  breakdown?: SentenceBreakdown;
+};
 
 function ExerciseGroup({
   title,
