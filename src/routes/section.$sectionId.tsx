@@ -131,13 +131,26 @@ function ToggleReveal({
   );
 }
 
-function StructureBreakdown({ questionText }: { questionText: string }) {
-  const { sentence, cars, introMy, noteMy } = useMemo(
-    () => buildTrainCars(questionText),
-    [questionText],
-  );
+function StructureBreakdown({
+  questionText,
+  breakdown,
+}: {
+  questionText: string;
+  breakdown?: SentenceBreakdown;
+}) {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const info = activeTag ? TAG_INFO[activeTag] : null;
+  const sentence = questionText.trim();
+
+  if (!breakdown) {
+    return (
+      <div className="text-sm text-muted-foreground">
+        🦉 ဒီမေးခွန်းအတွက် ဝါကျဖွဲ့စည်းပုံ ရှင်းလင်းချက်ကို မကြာမီ ထည့်ပေးပါမည်။
+      </div>
+    );
+  }
+
+  const { cars, introMy, noteMy } = breakdown;
 
   return (
     <div>
