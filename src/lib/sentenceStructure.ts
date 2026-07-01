@@ -475,6 +475,16 @@ export const TAG_INFO: Record<string, { titleMy: string; bodyMy: string; example
     bodyMy: "be-ကြိယာ (is/am/are/was/were) နောက်မှာ လာတဲ့ အပိုင်း — ကံတ္တားကို ပြန်ဖော်ပြ၊ ဖြည့်စွက်ပေးတယ်။ ('Object' မဟုတ်ပါ)",
     example: "She is a teacher. → 'a teacher' က Complement။",
   },
+  "Adverb Clause": {
+    titleMy: "ကြိယာဝိသေသန အခန်း (Adverb Clause)",
+    bodyMy: "ကြိယာကို ဖြည့်စွက်ဖော်ပြတဲ့ အခန်း — when / where / because / if စတဲ့ စကားလုံးနဲ့ စတယ်။ 'ဘယ်အချိန်၊ ဘယ်နေရာ၊ ဘယ်လိုအခြေအနေမှာ' လုပ်ဆောင်ခဲ့လဲ ဆိုတာ ပြောပါတယ်။",
+    example: "We use gestures when we speak.",
+  },
+  "Purpose Clause": {
+    titleMy: "ရည်ရွယ်ချက် အခန်း (Purpose Clause)",
+    bodyMy: "'to + verb' နဲ့ စတဲ့ အခန်း — 'ဘာအတွက် / ဘာရည်ရွယ်ချက်နဲ့' လုပ်တာလဲ ဆိုတာ ဖော်ပြပါတယ်။",
+    example: "We use graphics to help the reader understand better.",
+  },
   "Sentence": {
     titleMy: "ဝါကျ (Sentence)",
     bodyMy: "အပြည့်အစုံ အဓိပ္ပာယ်ရှိတဲ့ စကားစု — ကံတ္တား + ကြိယာ ပါဝင်တယ်။",

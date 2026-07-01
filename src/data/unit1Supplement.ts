@@ -1,11 +1,23 @@
 // Supplementary Burmese translations, vocabulary, and grammar explanation
 // for Unit 1 sections 1A / 1B / 1C. Keyed by section id.
 
+import type { TrainCar } from "@/lib/sentenceStructure";
+
 export type VocabItem = {
   word: string;
   pronunciation: string; // simple phonetic guide
   meaningMy: string;
   exampleEn?: string;
+};
+
+// Curated "Sentence Structure" breakdown for a single question. Every chunk
+// keeps its natural phrase together (no isolated prepositions) and carries a
+// Burmese fragment that mirrors the wording used in the main sentence
+// translation so students never see out-of-context machine glosses.
+export type SentenceBreakdown = {
+  introMy: string;
+  noteMy: string;
+  cars: TrainCar[];
 };
 
 export const partA1A_translations: Record<number, string> = {
@@ -109,4 +121,208 @@ export const grammar1C = {
   youtubeId: "1sZxmRrUmwM",
   youtubeTitle: "Appositives — English Grammar Explained",
   subtitleNoteMy: "မြန်မာ စာတန်းထိုး — မကြာမီ ထည့်ပေးပါမည်။",
+};
+
+/* ------------------------------------------------------------------ */
+/* Curated sentence-structure breakdowns                              */
+/* Each chunk is a full grammatical block, and each Burmese fragment  */
+/* is copied from the main sentence translation so the words match.   */
+/* ------------------------------------------------------------------ */
+
+const SVC_INTRO = "ဒါက Subject → Verb → Complement ပုံစံ ပြောကြားချက် ဝါကျပါ။";
+const SVC_NOTE =
+  "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Linking Verb) → ဖြည့်စွက်စာ (Complement) ။";
+const SVO_INTRO = "ဒါက Subject → Verb → Object ပုံစံ ပြောကြားချက် ဝါကျပါ။";
+const SVO_NOTE =
+  "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Main Verb) → ကံ (Object) ။ ဝိဘတ်စကားလုံး (of / at / for) များကို နာမ်စကားစုနှင့် အတူ ထားပါ။";
+const WH_INTRO = "ဒါက WH-မေးခွန်း ဝါကျပါ။";
+const WH_NOTE =
+  "ပုံစံ: WH-စကားလုံး → အကူကြိယာ (Helping Verb) → ကံတ္တား → ကြိယာ/ကံ ။ ဝိဘတ်စကားလုံးများကို သီးသန့် မခွဲပါ။";
+
+export const partA1A_breakdowns: Record<number, SentenceBreakdown> = {
+  1: {
+    introMy: SVC_INTRO,
+    noteMy: SVC_NOTE,
+    cars: [
+      { word: "The four language skills", translation: "ဘာသာစကား စွမ်းရည် လေးခုမှာ", tag: "Noun Subject" },
+      { word: "are", translation: "ဖြစ်ကြသည်", tag: "Linking Verb" },
+      { word: "___________", translation: "__________ တို့", tag: "Complement" },
+    ],
+  },
+  2: {
+    introMy: SVC_INTRO,
+    noteMy: SVC_NOTE,
+    cars: [
+      { word: "The first language skill to develop", translation: "အစောဆုံး ဖွံ့ဖြိုးတဲ့ ဘာသာစကား စွမ်းရည်သည်", tag: "Noun Subject" },
+      { word: "is", translation: "ဖြစ်သည်", tag: "Linking Verb" },
+      { word: "___________", translation: "__________", tag: "Complement" },
+    ],
+  },
+  3: {
+    introMy: SVO_INTRO,
+    noteMy:
+      "ပုံစံ: ကံတ္တား (Subject) → ကြိယာ (Main Verb \"begins\") → ကံ (Object) ။ \"to speak\" သည် \"begins\" ရဲ့ ကံ ဖြစ်ပြီး၊ \"at the age of ___\" သည် ဝိဘတ်စကားစုအဖြစ် တွဲထားပါ။",
+    cars: [
+      { word: "A baby", translation: "ကလေးငယ်တစ်ဦးသည်", tag: "Noun Subject" },
+      { word: "begins", translation: "စတင်သည်", tag: "Main Verb" },
+      { word: "to speak", translation: "ပြောတတ်ရန်", tag: "Noun Object" },
+      { word: "at the age of ___________", translation: "__________ အရွယ်တွင်", tag: "Prepositional Phrase" },
+    ],
+  },
+  4: {
+    introMy: SVO_INTRO,
+    noteMy: SVO_NOTE,
+    cars: [
+      { word: "Listening and ___________", translation: "နားထောင်ခြင်းနှင့် __________ တို့သည်", tag: "Noun Subject" },
+      { word: "work together", translation: "တွဲဖက် လုပ်ဆောင်ကြသည်", tag: "Main Verb" },
+      { word: "as a pair of skills", translation: "စွမ်းရည်များအဖြစ်", tag: "Prepositional Phrase" },
+    ],
+  },
+  5: {
+    introMy: SVO_INTRO,
+    noteMy: SVO_NOTE,
+    cars: [
+      { word: "The other pair of skills", translation: "နောက်ထပ် တွဲဖက် စွမ်းရည်များတွင်", tag: "Noun Subject" },
+      { word: "includes", translation: "ပါဝင်ကြသည်", tag: "Main Verb" },
+      { word: "___________", translation: "__________ တို့", tag: "Noun Object" },
+    ],
+  },
+  6: {
+    introMy: SVC_INTRO,
+    noteMy: SVC_NOTE,
+    cars: [
+      { word: "Speaking and writing", translation: "ပြောဆိုခြင်းနှင့် ရေးသားခြင်းတို့သည်", tag: "Noun Subject" },
+      { word: "are", translation: "ဖြစ်ကြသည်", tag: "Linking Verb" },
+      { word: "___________ skills", translation: "__________ စွမ်းရည်များ", tag: "Complement" },
+    ],
+  },
+  7: {
+    introMy: SVO_INTRO,
+    noteMy: SVO_NOTE,
+    cars: [
+      { word: "Language", translation: "ဘာသာစကားကို", tag: "Noun Subject" },
+      { word: "is also known as", translation: "အဖြစ်လည်း ခေါ်ဆိုကြသည်", tag: "Main Verb" },
+      { word: "a ___________", translation: "__________", tag: "Noun Object" },
+      { word: "for communication", translation: "ဆက်သွယ်ရေး အတွက်", tag: "Prepositional Phrase" },
+    ],
+  },
+  8: {
+    introMy: SVC_INTRO,
+    noteMy: SVC_NOTE,
+    cars: [
+      { word: "The two forms of communication", translation: "ဆက်သွယ်ရေး ပုံစံ နှစ်မျိုးမှာ", tag: "Noun Subject" },
+      { word: "are", translation: "ဖြစ်ကြသည်", tag: "Linking Verb" },
+      { word: "___________ and ___________", translation: "__________ နှင့် __________ တို့", tag: "Complement" },
+    ],
+  },
+  9: {
+    introMy: SVO_INTRO,
+    noteMy: SVO_NOTE,
+    cars: [
+      { word: "We", translation: "ကျွန်ုပ်တို့သည်", tag: "Noun Subject" },
+      { word: "use", translation: "အသုံးပြုကြသည်", tag: "Main Verb" },
+      { word: "___________", translation: "__________ ကို", tag: "Noun Object" },
+      { word: "when we speak", translation: "ပြောဆိုသည့်အခါ", tag: "Adverb Clause" },
+      { word: "to help the listener understand better", translation: "နားထောင်သူ ပိုနားလည်စေရန်", tag: "Purpose Clause" },
+    ],
+  },
+  10: {
+    introMy: SVO_INTRO,
+    noteMy: SVO_NOTE,
+    cars: [
+      { word: "We", translation: "ကျွန်ုပ်တို့သည်", tag: "Noun Subject" },
+      { word: "use", translation: "အသုံးပြုကြသည်", tag: "Main Verb" },
+      { word: "___________", translation: "__________ ကို", tag: "Noun Object" },
+      { word: "when we write", translation: "ရေးသားသည့်အခါ", tag: "Adverb Clause" },
+      { word: "to help the reader understand better", translation: "စာဖတ်သူ ပိုနားလည်စေရန်", tag: "Purpose Clause" },
+    ],
+  },
+};
+
+export const partB1A_breakdowns: Record<number, SentenceBreakdown> = {
+  1: {
+    introMy: WH_INTRO,
+    noteMy: WH_NOTE,
+    cars: [
+      { word: "When", translation: "ဘယ်အချိန်တွင်", tag: "WH-Question Word" },
+      { word: "does", translation: "—", tag: "Helping Verb" },
+      { word: "a child", translation: "ကလေးငယ်တစ်ဦးသည်", tag: "Noun Subject" },
+      { word: "begin", translation: "စတင်လုပ်ဆောင်သနည်း", tag: "Main Verb" },
+      { word: "to read and write", translation: "ဖတ်ခြင်းနှင့် ရေးခြင်းကို", tag: "Noun Object" },
+    ],
+  },
+  2: {
+    introMy: WH_INTRO,
+    noteMy: "ပုံစံ: WH-စကားလုံး (What) → Linking Verb (are) → ကံတ္တား (Subject) ။",
+    cars: [
+      { word: "What", translation: "ဘာတွေလဲ", tag: "WH-Question Word" },
+      { word: "are", translation: "—", tag: "Linking Verb" },
+      { word: "the productive skills of language", translation: "ဘာသာစကား၏ ထုတ်လုပ်နိုင်သော စွမ်းရည်များမှာ", tag: "Noun Subject" },
+    ],
+  },
+  3: {
+    introMy: WH_INTRO,
+    noteMy: "ပုံစံ: WH-စကားလုံး (What) → Linking Verb (are) → ကံတ္တား (Subject) ။",
+    cars: [
+      { word: "What", translation: "ဘာတွေလဲ", tag: "WH-Question Word" },
+      { word: "are", translation: "—", tag: "Linking Verb" },
+      { word: "the receptive skills of language", translation: "ဘာသာစကား၏ လက်ခံစုပ်ယူသော စွမ်းရည်များမှာ", tag: "Noun Subject" },
+    ],
+  },
+  4: {
+    introMy: WH_INTRO,
+    noteMy: WH_NOTE,
+    cars: [
+      { word: "Why", translation: "အဘယ်ကြောင့်", tag: "WH-Question Word" },
+      { word: "do", translation: "—", tag: "Helping Verb" },
+      { word: "we", translation: "ကျွန်ုပ်တို့သည်", tag: "Noun Subject" },
+      { word: "use", translation: "အသုံးပြုကြသနည်း", tag: "Main Verb" },
+      { word: "gestures", translation: "လက်ဟန်ခြေဟန်များကို", tag: "Noun Object" },
+      { word: "when we speak", translation: "ပြောဆိုသည့်အခါ", tag: "Adverb Clause" },
+    ],
+  },
+  5: {
+    introMy: WH_INTRO,
+    noteMy: WH_NOTE,
+    cars: [
+      { word: "How", translation: "မည်သို့", tag: "WH-Question Word" },
+      { word: "do", translation: "—", tag: "Helping Verb" },
+      { word: "we", translation: "ကျွန်ုပ်တို့သည်", tag: "Noun Subject" },
+      { word: "help", translation: "ကူညီပေးနိုင်သနည်း", tag: "Main Verb" },
+      { word: "the reader", translation: "စာဖတ်သူကို", tag: "Noun Object" },
+      { word: "understand what we write better", translation: "ကျွန်ုပ်တို့ ရေးသားသည့်အရာကို ပိုနားလည်စေရန်", tag: "Complement" },
+    ],
+  },
+  6: {
+    introMy: WH_INTRO,
+    noteMy: "ပုံစံ: WH-စကားလုံး (What) → Linking Verb (are) → ကံတ္တား (Subject) ။",
+    cars: [
+      { word: "What", translation: "ဘာတွေလဲ", tag: "WH-Question Word" },
+      { word: "are", translation: "—", tag: "Linking Verb" },
+      { word: "the two forms of communication", translation: "ဆက်သွယ်ရေး ပုံစံ နှစ်မျိုးမှာ", tag: "Noun Subject" },
+    ],
+  },
+  7: {
+    introMy: "ဒါက Yes/No မေးခွန်း ဝါကျဖြစ်ပြီး နောက်မှာ Why? ပါဝင်ပါတယ်။",
+    noteMy: WH_NOTE,
+    cars: [
+      { word: "Do", translation: "—", tag: "Helping Verb" },
+      { word: "you", translation: "သင်သည်", tag: "Noun Subject" },
+      { word: "want to learn", translation: "သင်ယူလိုပါသလား", tag: "Main Verb" },
+      { word: "any other foreign language", translation: "အခြားနိုင်ငံခြားဘာသာစကားတစ်ခုခုကို", tag: "Noun Object" },
+      { word: "apart from English", translation: "အင်္ဂလိပ်ဘာသာစကားအပြင်", tag: "Prepositional Phrase" },
+      { word: "Why", translation: "အဘယ်ကြောင့်လဲ", tag: "WH-Question Word" },
+    ],
+  },
+  8: {
+    introMy: WH_INTRO,
+    noteMy: SVC_NOTE,
+    cars: [
+      { word: "Which language skill", translation: "ဘယ် ဘာသာစကား စွမ်းရည်က", tag: "WH-Question Word" },
+      { word: "is", translation: "ဖြစ်သနည်း", tag: "Linking Verb" },
+      { word: "the most difficult", translation: "အခက်ဆုံး", tag: "Complement" },
+      { word: "for you to learn", translation: "သင့်အတွက် သင်ယူရန်", tag: "Prepositional Phrase" },
+      { word: "Why", translation: "အဘယ်ကြောင့်လဲ", tag: "WH-Question Word" },
+    ],
+  },
 };

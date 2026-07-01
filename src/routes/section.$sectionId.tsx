@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   ArrowLeft,
   BookOpen,
@@ -22,14 +22,17 @@ import { Input } from "@/components/ui/input";
 import unit1 from "@/data/textbookUnit1.json";
 import {
   grammar1C,
+  partA1A_breakdowns,
   partA1A_translations,
   partA1C_translations,
+  partB1A_breakdowns,
   partB1A_translations,
   partB1B_translations,
   partC1A_translations,
   vocab1B,
+  type SentenceBreakdown,
 } from "@/data/unit1Supplement";
-import { buildTrainCars, TAG_INFO } from "@/lib/sentenceStructure";
+import { TAG_INFO } from "@/lib/sentenceStructure";
 import {
   Sheet,
   SheetContent,
@@ -128,13 +131,26 @@ function ToggleReveal({
   );
 }
 
-function StructureBreakdown({ questionText }: { questionText: string }) {
-  const { sentence, cars, introMy, noteMy } = useMemo(
-    () => buildTrainCars(questionText),
-    [questionText],
-  );
+function StructureBreakdown({
+  questionText,
+  breakdown,
+}: {
+  questionText: string;
+  breakdown?: SentenceBreakdown;
+}) {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const info = activeTag ? TAG_INFO[activeTag] : null;
+  const sentence = questionText.trim();
+
+  if (!breakdown) {
+    return (
+      <div className="text-sm text-muted-foreground">
+        🦉 ဒီမေးခွန်းအတွက် ဝါကျဖွဲ့စည်းပုံ ရှင်းလင်းချက်ကို မကြာမီ ထည့်ပေးပါမည်။
+      </div>
+    );
+  }
+
+  const { cars, introMy, noteMy } = breakdown;
 
   return (
     <div>
@@ -327,6 +343,7 @@ function Section1A() {
             text: e.text,
             translation: partA1A_translations[e.question_number] ?? "",
             answer: e.answer,
+            breakdown: partA1A_breakdowns[e.question_number],
           }))}
         />
 
@@ -339,6 +356,7 @@ function Section1A() {
             text: e.question,
             translation: partB1A_translations[e.question_number] ?? "",
             answer: e.answer,
+            breakdown: partB1A_breakdowns[e.question_number],
           }))}
         />
 
@@ -390,7 +408,13 @@ function ParagraphBlock({
   );
 }
 
-type ExItem = { id: number; text: string; translation: string; answer: string };
+type ExItem = {
+  id: number;
+  text: string;
+  translation: string;
+  answer: string;
+  breakdown?: SentenceBreakdown;
+};
 
 function ExerciseGroup({
   title,
@@ -427,7 +451,10 @@ function ExerciseGroup({
               </ToggleReveal>
               {enableStructure && (
                 <ToggleReveal label="Sentence Structure" icon={Sparkles} tone="primary">
-                  <StructureBreakdown questionText={q.text.replace(/^"|"$/g, "")} />
+                  <StructureBreakdown
+                    questionText={q.text.replace(/^"|"$/g, "")}
+                    breakdown={q.breakdown}
+                  />
                 </ToggleReveal>
               )}
             </div>
