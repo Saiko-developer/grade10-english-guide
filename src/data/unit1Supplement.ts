@@ -1,11 +1,23 @@
 // Supplementary Burmese translations, vocabulary, and grammar explanation
 // for Unit 1 sections 1A / 1B / 1C. Keyed by section id.
 
+import type { TrainCar } from "@/lib/sentenceStructure";
+
 export type VocabItem = {
   word: string;
   pronunciation: string; // simple phonetic guide
   meaningMy: string;
   exampleEn?: string;
+};
+
+// Curated "Sentence Structure" breakdown for a single question. Every chunk
+// keeps its natural phrase together (no isolated prepositions) and carries a
+// Burmese fragment that mirrors the wording used in the main sentence
+// translation so students never see out-of-context machine glosses.
+export type SentenceBreakdown = {
+  introMy: string;
+  noteMy: string;
+  cars: TrainCar[];
 };
 
 export const partA1A_translations: Record<number, string> = {
