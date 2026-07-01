@@ -451,7 +451,10 @@ function ExerciseGroup({
               </ToggleReveal>
               {enableStructure && (
                 <ToggleReveal label="Sentence Structure" icon={Sparkles} tone="primary">
-                  <StructureBreakdown questionText={q.text.replace(/^"|"$/g, "")} />
+                  <StructureBreakdown
+                    questionText={q.text.replace(/^"|"$/g, "")}
+                    breakdown={q.breakdown}
+                  />
                 </ToggleReveal>
               )}
             </div>
