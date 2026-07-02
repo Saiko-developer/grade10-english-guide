@@ -100,65 +100,124 @@ export function useSpeechRecognition(opts: {
   return { listening, supported, start, stop };
 }
 
+// Cloud TTS via /api/tts (Lovable AI Gateway → openai/gpt-4o-mini-tts).
+// Native window.speechSynthesis does not support Burmese in most browsers,
+// so we always route audio through the multilingual cloud model.
 export function useSpeechSynthesis() {
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const urlRef = useRef<string | null>(null);
+  const reqIdRef = useRef(0);
 
   useEffect(() => {
-    setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
+    setSupported(typeof window !== "undefined" && typeof Audio !== "undefined");
   }, []);
 
-  const speak = useCallback((text: string, opts?: { lang?: string }) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const clean = text
-      .replace(/```[\s\S]*?```/g, "")
-      .replace(/[*_`#>]/g, "")
-      .replace(/\[(.*?)\]\(.*?\)/g, "$1");
-
-    // Split into Burmese vs non-Burmese runs so each speaks in the right voice.
-    const BURMESE = /[\u1000-\u109F\uAA60-\uAA7F\uA9E0-\uA9FF]/;
-    const segments: { text: string; lang: string }[] = [];
-    let buf = "";
-    let bufLang: string | null = null;
-    for (const ch of clean) {
-      const lang = BURMESE.test(ch) ? "my-MM" : "en-US";
-      if (bufLang === null) bufLang = lang;
-      if (lang !== bufLang) {
-        if (buf.trim()) segments.push({ text: buf, lang: bufLang });
-        buf = ch;
-        bufLang = lang;
-      } else {
-        buf += ch;
+  const cleanup = useCallback(() => {
+    if (audioRef.current) {
+      try {
+        audioRef.current.pause();
+      } catch {
+        // ignore
       }
+      audioRef.current.src = "";
+      audioRef.current = null;
     }
-    if (buf.trim() && bufLang) segments.push({ text: buf, lang: bufLang });
-    if (segments.length === 0) return;
-
-    const filtered = opts?.lang
-      ? segments.filter((s) => s.lang === opts.lang)
-      : segments;
-    if (filtered.length === 0) return;
-
-    setSpeaking(true);
-    filtered.forEach((seg, i) => {
-      const utter = new SpeechSynthesisUtterance(seg.text);
-      utter.lang = seg.lang;
-      utter.rate = 0.95;
-      utter.pitch = 1;
-      if (i === filtered.length - 1) {
-        utter.onend = () => setSpeaking(false);
-        utter.onerror = () => setSpeaking(false);
-      }
-      window.speechSynthesis.speak(utter);
-    });
+    if (urlRef.current) {
+      URL.revokeObjectURL(urlRef.current);
+      urlRef.current = null;
+    }
   }, []);
 
   const stop = useCallback(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
+    reqIdRef.current += 1; // invalidate any in-flight request
+    cleanup();
     setSpeaking(false);
-  }, []);
+  }, [cleanup]);
+
+  const speak = useCallback(
+    async (text: string, opts?: { lang?: string }) => {
+      if (typeof window === "undefined") return;
+
+      // Strip markdown/table noise while keeping Burmese + English characters.
+      const cleaned = text
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/\|/g, " ")
+        .replace(/[*_`#>]/g, "")
+        .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (!cleaned) return;
+
+      // Optional language filter: when the caller asks for a single language
+      // (e.g. Burmese-only lesson explanations), keep only matching runs but
+      // preserve the natural Burmese sentences intact.
+      let payload = cleaned;
+      if (opts?.lang) {
+        const BURMESE =
+          /[\u1000-\u109F\uAA60-\uAA7F\uA9E0-\uA9FF]/;
+        const wantBurmese = opts.lang === "my-MM" || opts.lang.startsWith("my");
+        const parts: string[] = [];
+        let buf = "";
+        let bufIsBurmese: boolean | null = null;
+        for (const ch of cleaned) {
+          const isB = BURMESE.test(ch);
+          if (bufIsBurmese === null) bufIsBurmese = isB;
+          if (isB !== bufIsBurmese) {
+            if (bufIsBurmese === wantBurmese && buf.trim()) parts.push(buf.trim());
+            buf = ch;
+            bufIsBurmese = isB;
+          } else {
+            buf += ch;
+          }
+        }
+        if (bufIsBurmese === wantBurmese && buf.trim()) parts.push(buf.trim());
+        payload = parts.join(" ").trim();
+      }
+      if (!payload) return;
+
+      stop();
+      const myId = ++reqIdRef.current;
+      setSpeaking(true);
+
+      try {
+        const res = await fetch("/api/tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: payload, voice: "alloy" }),
+        });
+        if (!res.ok) throw new Error(`TTS ${res.status}`);
+        const blob = await res.blob();
+        if (myId !== reqIdRef.current) return; // stopped/superseded
+        const url = URL.createObjectURL(blob);
+        urlRef.current = url;
+        const audio = new Audio(url);
+        audioRef.current = audio;
+        audio.onended = () => {
+          if (myId === reqIdRef.current) {
+            setSpeaking(false);
+            cleanup();
+          }
+        };
+        audio.onerror = () => {
+          if (myId === reqIdRef.current) {
+            setSpeaking(false);
+            cleanup();
+          }
+        };
+        await audio.play();
+      } catch (err) {
+        console.error("[tts] failed", err);
+        if (myId === reqIdRef.current) {
+          setSpeaking(false);
+          cleanup();
+        }
+      }
+    },
+    [cleanup, stop],
+  );
 
   useEffect(() => () => stop(), [stop]);
 
