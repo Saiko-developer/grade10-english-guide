@@ -90,30 +90,35 @@ function Index() {
 
   const { speak, stop: stopSpeaking, speaking, supported: ttsSupported } = useSpeechSynthesis();
 
-  const [micLang, setMicLang] = useState<"my-MM" | "en-US">("my-MM");
+  const finalBufferRef = useRef("");
   const recognition = useSpeechRecognition({
-    lang: micLang,
+    lang: "my-MM",
     onFinal: (text) => {
       const trimmed = text.trim();
       if (!trimmed) return;
-      void sendMessage({ text: trimmed });
+      finalBufferRef.current = (finalBufferRef.current
+        ? finalBufferRef.current + " "
+        : "") + trimmed;
+      if (textareaRef.current) {
+        textareaRef.current.value = finalBufferRef.current;
+        textareaRef.current.focus();
+      }
     },
     onInterim: (text) => {
-      if (textareaRef.current) textareaRef.current.value = text;
+      if (!textareaRef.current) return;
+      const base = finalBufferRef.current;
+      textareaRef.current.value = base ? `${base} ${text}` : text;
     },
   });
 
   const toggleMic = () => {
-    if (recognition.listening) recognition.stop();
-    else {
+    if (recognition.listening) {
+      recognition.stop();
+    } else {
       stopSpeaking();
+      finalBufferRef.current = textareaRef.current?.value.trim() ?? "";
       recognition.start();
     }
-  };
-
-  const toggleMicLang = () => {
-    if (recognition.listening) recognition.stop();
-    setMicLang((l) => (l === "my-MM" ? "en-US" : "my-MM"));
   };
 
   // Auto-speak the assistant's reply when voice mode is on and streaming finishes
