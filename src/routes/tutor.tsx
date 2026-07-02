@@ -309,8 +309,22 @@ Break it down step by step:
                     {recognition.listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
                 )}
+                {recognition.supported && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={toggleMicLang}
+                    title="Toggle microphone language"
+                    className="h-8 px-2 text-xs font-medium"
+                  >
+                    {micLang === "my-MM" ? "🇲🇲 မြန်မာ" : "🇬🇧 EN"}
+                  </Button>
+                )}
                 {recognition.listening && (
-                  <span className="text-xs text-muted-foreground">{t("tutor.listening")}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("tutor.listening")} ({micLang === "my-MM" ? "Burmese" : "English"})
+                  </span>
                 )}
               </div>
               <PromptInputSubmit status={status} disabled={isLoading} />
