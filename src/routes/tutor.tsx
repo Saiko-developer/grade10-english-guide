@@ -90,8 +90,9 @@ function Index() {
 
   const { speak, stop: stopSpeaking, speaking, supported: ttsSupported } = useSpeechSynthesis();
 
+  const [micLang, setMicLang] = useState<"my-MM" | "en-US">("my-MM");
   const recognition = useSpeechRecognition({
-    lang: "en-US",
+    lang: micLang,
     onFinal: (text) => {
       const trimmed = text.trim();
       if (!trimmed) return;
@@ -108,6 +109,11 @@ function Index() {
       stopSpeaking();
       recognition.start();
     }
+  };
+
+  const toggleMicLang = () => {
+    if (recognition.listening) recognition.stop();
+    setMicLang((l) => (l === "my-MM" ? "en-US" : "my-MM"));
   };
 
   // Auto-speak the assistant's reply when voice mode is on and streaming finishes
