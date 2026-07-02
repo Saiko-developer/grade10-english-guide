@@ -62,7 +62,7 @@ export function useSpeechRecognition(opts: {
     }
     const rec = new Ctor();
     rec.lang = lang;
-    rec.continuous = false;
+    rec.continuous = true;
     rec.interimResults = true;
     rec.onresult = (e) => {
       let finalText = "";
