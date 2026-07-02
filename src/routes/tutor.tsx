@@ -90,8 +90,9 @@ function Index() {
 
   const { speak, stop: stopSpeaking, speaking, supported: ttsSupported } = useSpeechSynthesis();
 
+  const [micLang, setMicLang] = useState<"my-MM" | "en-US">("my-MM");
   const recognition = useSpeechRecognition({
-    lang: "en-US",
+    lang: micLang,
     onFinal: (text) => {
       const trimmed = text.trim();
       if (!trimmed) return;
@@ -108,6 +109,11 @@ function Index() {
       stopSpeaking();
       recognition.start();
     }
+  };
+
+  const toggleMicLang = () => {
+    if (recognition.listening) recognition.stop();
+    setMicLang((l) => (l === "my-MM" ? "en-US" : "my-MM"));
   };
 
   // Auto-speak the assistant's reply when voice mode is on and streaming finishes
@@ -303,8 +309,22 @@ Break it down step by step:
                     {recognition.listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
                 )}
+                {recognition.supported && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={toggleMicLang}
+                    title="Toggle microphone language"
+                    className="h-8 px-2 text-xs font-medium"
+                  >
+                    {micLang === "my-MM" ? "🇲🇲 မြန်မာ" : "🇬🇧 EN"}
+                  </Button>
+                )}
                 {recognition.listening && (
-                  <span className="text-xs text-muted-foreground">{t("tutor.listening")}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("tutor.listening")} ({micLang === "my-MM" ? "Burmese" : "English"})
+                  </span>
                 )}
               </div>
               <PromptInputSubmit status={status} disabled={isLoading} />
