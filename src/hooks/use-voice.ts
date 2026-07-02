@@ -37,7 +37,7 @@ export function useSpeechRecognition(opts: {
   onFinal: (text: string) => void;
   onInterim?: (text: string) => void;
 }) {
-  const { lang = "en-US", onFinal, onInterim } = opts;
+  const { lang = "my-MM", onFinal, onInterim } = opts;
   const [listening, setListening] = useState(false);
   const [supported, setSupported] = useState(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
@@ -62,7 +62,7 @@ export function useSpeechRecognition(opts: {
     }
     const rec = new Ctor();
     rec.lang = lang;
-    rec.continuous = false;
+    rec.continuous = true;
     rec.interimResults = true;
     rec.onresult = (e) => {
       let finalText = "";
