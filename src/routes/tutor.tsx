@@ -124,6 +124,18 @@ function Index() {
     }
   };
 
+  // Parse <voice_only>...</voice_only> and <ui_display>...</ui_display> blocks.
+  // If neither tag exists, treat the whole text as ui_display (and, in voice mode, as spoken).
+  const parseVoiceReply = (raw: string) => {
+    const voiceMatch = raw.match(/<voice_only>([\s\S]*?)<\/voice_only>/i);
+    const uiMatch = raw.match(/<ui_display>([\s\S]*?)<\/ui_display>/i);
+    if (!voiceMatch && !uiMatch) return { voice: raw.trim(), ui: raw.trim() };
+    return {
+      voice: (voiceMatch?.[1] ?? uiMatch?.[1] ?? "").trim(),
+      ui: (uiMatch?.[1] ?? voiceMatch?.[1] ?? "").trim(),
+    };
+  };
+
   // Auto-speak the assistant's reply when voice mode is on and streaming finishes
   const spokenIdRef = useRef<string | null>(null);
   useEffect(() => {
@@ -132,16 +144,19 @@ function Index() {
     const last = messages[messages.length - 1];
     if (!last || last.role !== "assistant") return;
     if (spokenIdRef.current === last.id) return;
-    const text = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
-    if (!text) return;
+    const raw = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
+    if (!raw) return;
     spokenIdRef.current = last.id;
+    const { voice } = parseVoiceReply(raw);
+    if (!voice) return;
     // For lesson explanations, speak only Burmese; otherwise speak both languages
     if (lessonExplanationRef.current) {
-      speak(text, { lang: "my-MM" });
+      speak(voice, { lang: "my-MM" });
     } else {
-      speak(text);
+      speak(voice);
     }
   }, [voiceMode, ttsSupported, status, messages, speak]);
+
 
   // Auto-send an explanation request when a lesson is selected from /lessons
   const autoSentRef = useRef<string | null>(null);
@@ -267,9 +282,11 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
             ) : (
               <div className="space-y-2 py-4">
                 {messages.map((m: UIMessage) => {
-                  const text = m.parts
+                  const raw = m.parts
                     .map((p) => (p.type === "text" ? p.text : ""))
                     .join("");
+                  const text = m.role === "assistant" ? parseVoiceReply(raw).ui : raw;
+
                   return (
                     <Message from={m.role} key={m.id}>
                       {m.role === "user" ? (
