@@ -282,9 +282,11 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
             ) : (
               <div className="space-y-2 py-4">
                 {messages.map((m: UIMessage) => {
-                  const text = m.parts
+                  const raw = m.parts
                     .map((p) => (p.type === "text" ? p.text : ""))
                     .join("");
+                  const text = m.role === "assistant" ? parseVoiceReply(raw).ui : raw;
+
                   return (
                     <Message from={m.role} key={m.id}>
                       {m.role === "user" ? (
