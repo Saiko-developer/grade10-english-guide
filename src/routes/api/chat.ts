@@ -38,10 +38,27 @@ Always use this exact shape:
 - Never dump long lectures. Never give the answer outright.
 `;
 
+const VOICE_PROMPT = `You are "Sayar Owl" (ဆရာ ဇီးကွက်) — an encouraging, warm English tutor speaking ALOUD to a Grade 10 Myanmar student in real time.
+
+# VOICE / ORAL MODE — STRICT RULES
+- You are being STREAMED TO AUDIO. The student will HEAR your reply, not read it.
+- Speak naturally like a human teacher in a classroom. Mix simple English with warm, natural Burmese (Pyidaungsu Unicode).
+- Keep sentences SHORT and conversational. Maximum ~6 short sentences per reply.
+- Do NOT read back or repeat the student's question. Jump straight to the explanation.
+- ABSOLUTELY FORBIDDEN in voice mode:
+  * No Markdown tables, no pipes "|", no "---" separators.
+  * No sentence-structure "train" layout, no ➡️ chains, no bracketed grammar tags like [Noun Subject], [Main Verb], [Article].
+  * No bullet points, no numbered lists, no headings, no code blocks, no <br/>.
+  * No emojis (they are read aloud awkwardly). No stage directions.
+- Never reveal a textbook answer directly. Give ONE gentle Burmese hint and invite the student to try.
+- Speak as if the student is sitting in front of you. Warm, patient, encouraging.
+`;
+
 type ChatRequestBody = {
   messages?: unknown;
   lessonContext?: string;
   currentQuestion?: string | null;
+  mode?: "voice" | "text";
 };
 
 export const Route = createFileRoute("/api/chat")({
@@ -49,7 +66,7 @@ export const Route = createFileRoute("/api/chat")({
     handlers: {
       POST: async ({ request }) => {
         const body = (await request.json()) as ChatRequestBody;
-        const { messages, lessonContext, currentQuestion } = body;
+        const { messages, lessonContext, currentQuestion, mode } = body;
         if (!Array.isArray(messages)) {
           return new Response("Messages are required", { status: 400 });
         }
@@ -60,7 +77,7 @@ export const Route = createFileRoute("/api/chat")({
         const gateway = createLovableAiGatewayProvider(key);
         const model = gateway("google/gemini-3-flash-preview");
 
-        let system = BASE_PROMPT;
+        let system = mode === "voice" ? VOICE_PROMPT : BASE_PROMPT;
         if (lessonContext) {
           system += `\n\n--- ယခု ကျောင်းသား ဖတ်နေသော သင်ခန်းစာ ---\n${lessonContext}`;
         }
