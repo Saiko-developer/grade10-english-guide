@@ -91,11 +91,13 @@ function Index() {
   const { speak, stop: stopSpeaking, speaking, supported: ttsSupported } = useSpeechSynthesis();
 
   const finalBufferRef = useRef("");
+  const micUsedRef = useRef(false);
   const recognition = useSpeechRecognition({
     lang: "my-MM",
     onFinal: (text) => {
       const trimmed = text.trim();
       if (!trimmed) return;
+      micUsedRef.current = true;
       finalBufferRef.current = (finalBufferRef.current
         ? finalBufferRef.current + " "
         : "") + trimmed;
@@ -106,6 +108,7 @@ function Index() {
     },
     onInterim: (text) => {
       if (!textareaRef.current) return;
+      micUsedRef.current = true;
       const base = finalBufferRef.current;
       textareaRef.current.value = base ? `${base} ${text}` : text;
     },
@@ -151,27 +154,27 @@ function Index() {
     lessonExplanationRef.current = true; // mark as lesson explanation so only Burmese is spoken
     const prompt = `Please explain the lesson "${lesson}"${category ? ` (${category})` : ""} for a Grade 10 student in Myanmar.
 
-Break it down step by step:
-1. Simple explanation of the rule (the "why").
-2. Sentence structure / pattern.
-3. 2–3 clear example sentences.
-4. Myanmar translation for the key idea and one example.
-5. End with a short practice question I can try.`;
-    void sendMessage({ text: prompt });
+Please teach this as a spoken lesson — natural conversational voice, short sentences, warm Burmese explanation mixed with the key English terms. Do not use tables, diagrams, bullet points, brackets, or grammar tags. End with a short spoken practice question.`;
+    void sendMessage({ text: prompt }, { body: { mode: "voice" } });
   }, [lesson, category, messages.length, sendMessage]);
 
   const handleSubmit = (message: PromptInputMessage) => {
     const text = message.text?.trim();
     if (!text || status === "submitted" || status === "streaming") return;
     lessonExplanationRef.current = false;
-    void sendMessage({ text });
+    const isVoiceInput = micUsedRef.current || voiceMode;
+    micUsedRef.current = false;
+    finalBufferRef.current = "";
+    void sendMessage({ text }, { body: { mode: isVoiceInput ? "voice" : "text" } });
   };
 
   const handleStarter = (prompt: string) => {
     if (status === "submitted" || status === "streaming") return;
     lessonExplanationRef.current = false;
-    void sendMessage({ text: prompt });
+    micUsedRef.current = false;
+    void sendMessage({ text: prompt }, { body: { mode: voiceMode ? "voice" : "text" } });
   };
+
 
   const isLoading = status === "submitted" || status === "streaming";
   const lastMessage = messages[messages.length - 1];
