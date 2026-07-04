@@ -305,6 +305,11 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
                     .map((p) => (p.type === "text" ? p.text : ""))
                     .join("");
                   const text = m.role === "assistant" ? parseVoiceReply(raw).ui : raw;
+                  const isAssistant = m.role === "assistant";
+                  // Voice-first: for assistant messages in voice mode, hide the
+                  // Short Note until the audio actually starts playing.
+                  const hideForVoice =
+                    isAssistant && voiceMode && ttsSupported && !revealedIds.has(m.id);
 
                   return (
                     <Message from={m.role} key={m.id}>
@@ -312,7 +317,11 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
                         <MessageContent>{text}</MessageContent>
                       ) : (
                         <MessageContent className="bg-transparent px-0 py-0">
-                          <MessageResponse>{text}</MessageResponse>
+                          {hideForVoice ? (
+                            <Shimmer>{speaking ? "🔊 Listen..." : t("tutor.thinking")}</Shimmer>
+                          ) : (
+                            <MessageResponse>{text}</MessageResponse>
+                          )}
                         </MessageContent>
                       )}
                     </Message>
