@@ -37,7 +37,7 @@ export function useSpeechRecognition(opts: {
   onFinal: (text: string) => void;
   onInterim?: (text: string) => void;
 }) {
-  const { lang = "my-MM", onFinal, onInterim } = opts;
+  const { lang, onFinal, onInterim } = opts;
   const [listening, setListening] = useState(false);
   const [supported, setSupported] = useState(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
