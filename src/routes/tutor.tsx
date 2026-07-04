@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Languages, Lightbulb, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 
 import tutorLogo from "@/assets/tutor-logo.png";
