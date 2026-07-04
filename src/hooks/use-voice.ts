@@ -137,7 +137,10 @@ export function useSpeechSynthesis() {
   }, [cleanup]);
 
   const speak = useCallback(
-    async (text: string, opts?: { lang?: string }) => {
+    async (
+      text: string,
+      opts?: { lang?: string; speed?: number; onStart?: () => void },
+    ) => {
       if (typeof window === "undefined") return;
 
       // Strip markdown/table noise while keeping Burmese + English characters.
@@ -151,13 +154,9 @@ export function useSpeechSynthesis() {
         .trim();
       if (!cleaned) return;
 
-      // Optional language filter: when the caller asks for a single language
-      // (e.g. Burmese-only lesson explanations), keep only matching runs but
-      // preserve the natural Burmese sentences intact.
       let payload = cleaned;
       if (opts?.lang) {
-        const BURMESE =
-          /[\u1000-\u109F\uAA60-\uAA7F\uA9E0-\uA9FF]/;
+        const BURMESE = /[\u1000-\u109F\uAA60-\uAA7F\uA9E0-\uA9FF]/;
         const wantBurmese = opts.lang === "my-MM" || opts.lang.startsWith("my");
         const parts: string[] = [];
         let buf = "";
@@ -176,7 +175,11 @@ export function useSpeechSynthesis() {
         if (bufIsBurmese === wantBurmese && buf.trim()) parts.push(buf.trim());
         payload = parts.join(" ").trim();
       }
-      if (!payload) return;
+      if (!payload) {
+        // Nothing to actually speak — still fire onStart so UI can proceed.
+        opts?.onStart?.();
+        return;
+      }
 
       stop();
       const myId = ++reqIdRef.current;
@@ -186,15 +189,26 @@ export function useSpeechSynthesis() {
         const res = await fetch("/api/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: payload, voice: "alloy" }),
+          body: JSON.stringify({
+            text: payload,
+            voice: "alloy",
+            speed: opts?.speed ?? 1.1,
+          }),
         });
         if (!res.ok) throw new Error(`TTS ${res.status}`);
         const blob = await res.blob();
-        if (myId !== reqIdRef.current) return; // stopped/superseded
+        if (myId !== reqIdRef.current) return;
         const url = URL.createObjectURL(blob);
         urlRef.current = url;
         const audio = new Audio(url);
         audioRef.current = audio;
+        let started = false;
+        const fireStart = () => {
+          if (started) return;
+          started = true;
+          if (myId === reqIdRef.current) opts?.onStart?.();
+        };
+        audio.onplaying = fireStart;
         audio.onended = () => {
           if (myId === reqIdRef.current) {
             setSpeaking(false);
@@ -203,14 +217,17 @@ export function useSpeechSynthesis() {
         };
         audio.onerror = () => {
           if (myId === reqIdRef.current) {
+            fireStart(); // reveal UI even if audio fails
             setSpeaking(false);
             cleanup();
           }
         };
         await audio.play();
+        fireStart();
       } catch (err) {
         console.error("[tts] failed", err);
         if (myId === reqIdRef.current) {
+          opts?.onStart?.(); // don't block UI on TTS failure
           setSpeaking(false);
           cleanup();
         }
