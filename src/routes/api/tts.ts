@@ -3,13 +3,14 @@ import { createFileRoute } from "@tanstack/react-router";
 type TtsBody = {
   text?: string;
   voice?: string;
+  speed?: number;
 };
 
 export const Route = createFileRoute("/api/tts")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { text, voice = "alloy" } = (await request.json()) as TtsBody;
+        const { text, voice = "alloy", speed } = (await request.json()) as TtsBody;
         if (!text || typeof text !== "string") {
           return new Response("text is required", { status: 400 });
         }
@@ -17,7 +18,6 @@ export const Route = createFileRoute("/api/tts")({
         const key = process.env.LOVABLE_API_KEY;
         if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
 
-        // Strip markdown / html noise but KEEP Burmese and English characters.
         const clean = text
           .replace(/<br\s*\/?>/gi, " ")
           .replace(/```[\s\S]*?```/g, "")
@@ -29,8 +29,8 @@ export const Route = createFileRoute("/api/tts")({
 
         if (!clean) return new Response("empty text", { status: 400 });
 
-        // Cap input to keep latency reasonable.
         const input = clean.length > 3500 ? clean.slice(0, 3500) : clean;
+        const safeSpeed = Math.min(1.5, Math.max(0.5, speed ?? 1.1));
 
         const upstream = await fetch(
           "https://ai.gateway.lovable.dev/v1/audio/speech",
@@ -46,9 +46,9 @@ export const Route = createFileRoute("/api/tts")({
               input,
               voice,
               response_format: "mp3",
-              // Nudge the model to speak Burmese naturally when present.
+              speed: safeSpeed,
               instructions:
-                "Speak clearly and warmly for a Grade 10 student in Myanmar. When Burmese (Myanmar) script appears, pronounce it as native Burmese; when English appears, pronounce it as English.",
+                "Speak clearly and warmly for a Grade 10 student in Myanmar, with a slightly upbeat pace. When Burmese (Myanmar) script appears, pronounce it as native Burmese; when English appears, pronounce it as English.",
             }),
           },
         );
