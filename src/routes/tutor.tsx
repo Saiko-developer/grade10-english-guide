@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BookOpen, Languages, Lightbulb, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 
 import tutorLogo from "@/assets/tutor-logo.png";
@@ -136,10 +136,21 @@ function Index() {
     };
   };
 
+  // Voice-first: when voice mode is on, hide the assistant's Short Note
+  // until the spoken audio actually starts playing.
+  const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
+  const revealId = useCallback((id: string) => {
+    setRevealedIds((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  }, []);
+
   // Auto-speak the assistant's reply when voice mode is on and streaming finishes
   const spokenIdRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!voiceMode || !ttsSupported) return;
     if (status !== "ready") return;
     const last = messages[messages.length - 1];
     if (!last || last.role !== "assistant") return;
@@ -147,15 +158,23 @@ function Index() {
     const raw = last.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
     if (!raw) return;
     spokenIdRef.current = last.id;
-    const { voice } = parseVoiceReply(raw);
-    if (!voice) return;
-    // For lesson explanations, speak only Burmese; otherwise speak both languages
-    if (lessonExplanationRef.current) {
-      speak(voice, { lang: "my-MM" });
-    } else {
-      speak(voice);
+
+    if (!voiceMode || !ttsSupported) {
+      revealId(last.id); // no audio → show text immediately
+      return;
     }
-  }, [voiceMode, ttsSupported, status, messages, speak]);
+    const { voice } = parseVoiceReply(raw);
+    if (!voice) {
+      revealId(last.id);
+      return;
+    }
+    const onStart = () => revealId(last.id);
+    if (lessonExplanationRef.current) {
+      void speak(voice, { lang: "my-MM", speed: 1.1, onStart });
+    } else {
+      void speak(voice, { speed: 1.1, onStart });
+    }
+  }, [voiceMode, ttsSupported, status, messages, speak, revealId]);
 
 
   // Auto-send an explanation request when a lesson is selected from /lessons
@@ -286,6 +305,11 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
                     .map((p) => (p.type === "text" ? p.text : ""))
                     .join("");
                   const text = m.role === "assistant" ? parseVoiceReply(raw).ui : raw;
+                  const isAssistant = m.role === "assistant";
+                  // Voice-first: for assistant messages in voice mode, hide the
+                  // Short Note until the audio actually starts playing.
+                  const hideForVoice =
+                    isAssistant && voiceMode && ttsSupported && !revealedIds.has(m.id);
 
                   return (
                     <Message from={m.role} key={m.id}>
@@ -293,7 +317,11 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
                         <MessageContent>{text}</MessageContent>
                       ) : (
                         <MessageContent className="bg-transparent px-0 py-0">
-                          <MessageResponse>{text}</MessageResponse>
+                          {hideForVoice ? (
+                            <Shimmer>{speaking ? "🔊 Listen..." : t("tutor.thinking")}</Shimmer>
+                          ) : (
+                            <MessageResponse>{text}</MessageResponse>
+                          )}
                         </MessageContent>
                       )}
                     </Message>
