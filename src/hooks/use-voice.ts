@@ -61,7 +61,7 @@ export function useSpeechRecognition(opts: {
       }
     }
     const rec = new Ctor();
-    rec.lang = lang;
+    rec.lang = lang ?? (typeof navigator !== "undefined" ? navigator.language : "");
     rec.continuous = true;
     rec.interimResults = true;
     rec.onresult = (e) => {
