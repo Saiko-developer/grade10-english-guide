@@ -361,16 +361,12 @@ Please teach this as a spoken lesson — natural conversational voice, short sen
                     {recognition.listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
                 )}
-                {recognition.supported && (
-                  <span className="inline-flex h-8 items-center rounded-md border border-input px-2 text-xs font-medium text-muted-foreground">
-                    🇲🇲 မြန်မာ
-                  </span>
-                )}
                 {recognition.listening && (
                   <span className="text-xs text-muted-foreground">
-                    {t("tutor.listening")} (Burmese)
+                    {t("tutor.listening")}
                   </span>
                 )}
+
               </div>
               <PromptInputSubmit status={status} disabled={isLoading} />
             </PromptInputFooter>
