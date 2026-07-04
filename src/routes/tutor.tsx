@@ -93,7 +93,6 @@ function Index() {
   const finalBufferRef = useRef("");
   const micUsedRef = useRef(false);
   const recognition = useSpeechRecognition({
-    lang: "my-MM",
     onFinal: (text) => {
       const trimmed = text.trim();
       if (!trimmed) return;
