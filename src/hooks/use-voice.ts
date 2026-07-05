@@ -61,7 +61,9 @@ export function useSpeechRecognition(opts: {
       }
     }
     const rec = new Ctor();
-    rec.lang = lang ?? (typeof navigator !== "undefined" ? navigator.language : "");
+    // Default to Burmese since students speak mostly Burmese; the recognizer
+    // still handles mixed English words in the same utterance.
+    rec.lang = lang ?? "my-MM";
     rec.continuous = true;
     rec.interimResults = true;
     rec.onresult = (e) => {
