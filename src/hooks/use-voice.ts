@@ -198,7 +198,10 @@ export function useSpeechSynthesis() {
             speed: opts?.speed ?? 1.1,
           }),
         });
-        if (!res.ok) throw new Error(`TTS ${res.status}`);
+        if (!res.ok) {
+          const detail = await res.text().catch(() => "");
+          throw new Error(`TTS ${res.status}${detail ? `: ${detail}` : ""}`);
+        }
         const blob = await res.blob();
         if (myId !== reqIdRef.current) return;
         const url = URL.createObjectURL(blob);
