@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 // Minimal Web Speech API types (not in lib.dom for all TS configs)
 type SpeechRecognitionResult = {
@@ -61,7 +62,9 @@ export function useSpeechRecognition(opts: {
       }
     }
     const rec = new Ctor();
-    rec.lang = lang ?? (typeof navigator !== "undefined" ? navigator.language : "");
+    // Default to Burmese since students speak mostly Burmese; the recognizer
+    // still handles mixed English words in the same utterance.
+    rec.lang = lang ?? "my-MM";
     rec.continuous = true;
     rec.interimResults = true;
     rec.onresult = (e) => {
@@ -195,7 +198,10 @@ export function useSpeechSynthesis() {
             speed: opts?.speed ?? 1.1,
           }),
         });
-        if (!res.ok) throw new Error(`TTS ${res.status}`);
+        if (!res.ok) {
+          const detail = await res.text().catch(() => "");
+          throw new Error(`TTS ${res.status}${detail ? `: ${detail}` : ""}`);
+        }
         const blob = await res.blob();
         if (myId !== reqIdRef.current) return;
         const url = URL.createObjectURL(blob);
@@ -226,6 +232,16 @@ export function useSpeechSynthesis() {
         fireStart();
       } catch (err) {
         console.error("[tts] failed", err);
+        const msg = err instanceof Error ? err.message : String(err);
+        if (/TTS 401|unauthorized|missing_permissions/i.test(msg)) {
+          toast.error("ElevenLabs voice unavailable", {
+            description:
+              "The ElevenLabs API key is missing the text_to_speech permission. Regenerate the key with Text-to-Speech access enabled and reconnect it.",
+            duration: 10000,
+          });
+        } else if (/TTS 4\d\d|TTS 5\d\d/.test(msg)) {
+          toast.error("Voice failed to play", { description: msg });
+        }
         if (myId === reqIdRef.current) {
           opts?.onStart?.(); // don't block UI on TTS failure
           setSpeaking(false);
