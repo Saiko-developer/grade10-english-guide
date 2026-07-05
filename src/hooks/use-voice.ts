@@ -232,6 +232,16 @@ export function useSpeechSynthesis() {
         fireStart();
       } catch (err) {
         console.error("[tts] failed", err);
+        const msg = err instanceof Error ? err.message : String(err);
+        if (/TTS 401|unauthorized|missing_permissions/i.test(msg)) {
+          toast.error("ElevenLabs voice unavailable", {
+            description:
+              "The ElevenLabs API key is missing the text_to_speech permission. Regenerate the key with Text-to-Speech access enabled and reconnect it.",
+            duration: 10000,
+          });
+        } else if (/TTS 4\d\d|TTS 5\d\d/.test(msg)) {
+          toast.error("Voice failed to play", { description: msg });
+        }
         if (myId === reqIdRef.current) {
           opts?.onStart?.(); // don't block UI on TTS failure
           setSpeaking(false);
