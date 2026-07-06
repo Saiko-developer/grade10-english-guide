@@ -67,42 +67,97 @@ export const Route = createFileRoute("/api/tts")({
 
         const voiceId = resolveVoiceId(voice);
 
-        const upstream = await fetch(
-          `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
-          {
-            method: "POST",
-            headers: {
-              "xi-api-key": key,
-              "Content-Type": "application/json; charset=utf-8",
-              Accept: "audio/mpeg",
-            },
-            body: JSON.stringify({
-              text: input,
-              // Multilingual v2 handles mixed English + Burmese in the same payload.
-              model_id: "eleven_multilingual_v2",
-              voice_settings: {
-                stability: 0.5,
-                similarity_boost: 0.75,
-                style: 0.35,
-                use_speaker_boost: true,
-                speed: safeSpeed,
+        // 1) Try ElevenLabs first.
+        try {
+          const upstream = await fetch(
+            `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
+            {
+              method: "POST",
+              headers: {
+                "xi-api-key": key,
+                "Content-Type": "application/json; charset=utf-8",
+                Accept: "audio/mpeg",
               },
-            }),
-          },
-        );
+              body: JSON.stringify({
+                text: input,
+                model_id: "eleven_multilingual_v2",
+                voice_settings: {
+                  stability: 0.5,
+                  similarity_boost: 0.75,
+                  style: 0.35,
+                  use_speaker_boost: true,
+                  speed: safeSpeed,
+                },
+              }),
+            },
+          );
 
-        if (!upstream.ok) {
-          const detail = await upstream.text().catch(() => "");
-          console.error("[tts] elevenlabs upstream", upstream.status, detail);
-          return new Response(detail || "TTS failed", { status: upstream.status });
+          if (!upstream.ok) {
+            const detail = await upstream.text().catch(() => "");
+            throw new Error(`ElevenLabs ${upstream.status}: ${detail}`);
+          }
+
+          return new Response(upstream.body, {
+            headers: {
+              "Content-Type": "audio/mpeg",
+              "Cache-Control": "no-store",
+              "X-TTS-Provider": "elevenlabs",
+            },
+          });
+        } catch (err) {
+          // 2) Automatic fallback to OpenAI TTS via Lovable AI Gateway.
+          console.warn(
+            "ElevenLabs failed or quota exceeded. Switching to OpenAI backup system...",
+            err instanceof Error ? err.message : err,
+          );
+
+          const lovableKey = process.env.LOVABLE_API_KEY;
+          if (!lovableKey) {
+            return new Response("TTS unavailable: no fallback key", { status: 502 });
+          }
+
+          // Map ElevenLabs voice ids back to reasonable OpenAI voice names.
+          const openaiVoice =
+            voice && /^(alloy|nova|shimmer|echo|fable|onyx)$/i.test(voice)
+              ? voice.toLowerCase()
+              : "shimmer";
+
+          const fallback = await fetch(
+            "https://ai.gateway.lovable.dev/v1/audio/speech",
+            {
+              method: "POST",
+              headers: {
+                "Lovable-API-Key": lovableKey,
+                "Content-Type": "application/json; charset=utf-8",
+                Accept: "audio/mpeg",
+              },
+              body: JSON.stringify({
+                model: "openai/gpt-4o-mini-tts",
+                input,
+                voice: openaiVoice,
+                response_format: "mp3",
+                speed: safeSpeed,
+              }),
+            },
+          ).catch((e) => {
+            console.error("[tts] openai fallback network error", e);
+            return null;
+          });
+
+          if (!fallback || !fallback.ok) {
+            const detail = fallback ? await fallback.text().catch(() => "") : "network error";
+            console.error("[tts] openai fallback failed", fallback?.status, detail);
+            return new Response(detail || "TTS failed", { status: fallback?.status ?? 502 });
+          }
+
+          return new Response(fallback.body, {
+            headers: {
+              "Content-Type": "audio/mpeg",
+              "Cache-Control": "no-store",
+              "X-TTS-Provider": "openai",
+            },
+          });
         }
-
-        return new Response(upstream.body, {
-          headers: {
-            "Content-Type": "audio/mpeg",
-            "Cache-Control": "no-store",
-          },
-        });
       },
     },
   },
