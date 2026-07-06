@@ -42,12 +42,16 @@ export const Route = createFileRoute("/api/tts")({
         if (!key) return new Response("Missing ELEVENLABS_API_KEY", { status: 500 });
 
         // Strip markdown / structure noise but preserve Burmese script and English words.
+        // Strip ALL markdown + any leftover HTML/XML tags before sending to ElevenLabs.
+        // Multilingual v2 gets confused by raw tags/markdown and can produce garbled output.
         const clean = text
-          .replace(/<br\s*\/?>/gi, " ")
-          .replace(/```[\s\S]*?```/g, "")
+          .replace(/```[\s\S]*?```/g, " ")   // fenced code blocks
+          .replace(/`[^`]*`/g, " ")           // inline code
+          .replace(/<[^>]+>/g, " ")           // any HTML/XML tag (incl. <br>, <voice_only>, etc.)
+          .replace(/\[(.*?)\]\(.*?\)/g, "$1") // markdown links
+          .replace(/!\[.*?\]\(.*?\)/g, " ")   // markdown images
           .replace(/\|/g, " ")
-          .replace(/[*_`#>]/g, "")
-          .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+          .replace(/[*_#>~]/g, "")
           .replace(/\s+/g, " ")
           .trim();
 
