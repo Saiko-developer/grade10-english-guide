@@ -92,7 +92,21 @@ function Index() {
 
   const finalBufferRef = useRef("");
   const micUsedRef = useRef(false);
+  const autoSubmitRef = useRef(false);
+
+  const submitFromBuffer = useCallback(() => {
+    const text = (textareaRef.current?.value ?? finalBufferRef.current).trim();
+    if (!text) return;
+    if (status === "submitted" || status === "streaming") return;
+    lessonExplanationRef.current = false;
+    micUsedRef.current = false;
+    finalBufferRef.current = "";
+    if (textareaRef.current) textareaRef.current.value = "";
+    void sendMessage({ text }, { body: { mode: "voice" } });
+  }, [sendMessage, status]);
+
   const recognition = useSpeechRecognition({
+    silenceMs: 2500,
     onFinal: (text) => {
       const trimmed = text.trim();
       if (!trimmed) return;
@@ -111,6 +125,16 @@ function Index() {
       const base = finalBufferRef.current;
       textareaRef.current.value = base ? `${base} ${text}` : text;
     },
+    onSilence: () => {
+      // Silence threshold hit — auto-submit whatever the student said.
+      autoSubmitRef.current = true;
+      // Give the recognizer a tick to flush any pending final result.
+      setTimeout(() => {
+        if (!autoSubmitRef.current) return;
+        autoSubmitRef.current = false;
+        submitFromBuffer();
+      }, 250);
+    },
   });
 
   const toggleMic = () => {
@@ -118,10 +142,13 @@ function Index() {
       recognition.stop();
     } else {
       stopSpeaking();
+      // Force voice mode on so the reply plays back automatically.
+      setVoiceMode(true);
       finalBufferRef.current = textareaRef.current?.value.trim() ?? "";
       recognition.start();
     }
   };
+
 
   // Parse <voice_only>...</voice_only> and <ui_display>...</ui_display> blocks.
   // If neither tag exists, treat the whole text as ui_display (and, in voice mode, as spoken).

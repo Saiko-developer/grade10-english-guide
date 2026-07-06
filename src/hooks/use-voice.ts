@@ -35,21 +35,45 @@ function getRecognitionCtor():
 
 export function useSpeechRecognition(opts: {
   lang?: string;
+  silenceMs?: number;
   onFinal: (text: string) => void;
   onInterim?: (text: string) => void;
+  onSilence?: () => void;
 }) {
-  const { lang, onFinal, onInterim } = opts;
+  const { lang, silenceMs = 2500, onFinal, onInterim, onSilence } = opts;
   const [listening, setListening] = useState(false);
   const [supported, setSupported] = useState(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
+  const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onFinalRef = useRef(onFinal);
   const onInterimRef = useRef(onInterim);
+  const onSilenceRef = useRef(onSilence);
   onFinalRef.current = onFinal;
   onInterimRef.current = onInterim;
+  onSilenceRef.current = onSilence;
 
   useEffect(() => {
     setSupported(getRecognitionCtor() !== null);
   }, []);
+
+  const clearSilenceTimer = useCallback(() => {
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  }, []);
+
+  const armSilenceTimer = useCallback(() => {
+    clearSilenceTimer();
+    silenceTimerRef.current = setTimeout(() => {
+      try {
+        recRef.current?.stop();
+      } catch {
+        // ignore
+      }
+      onSilenceRef.current?.();
+    }, silenceMs);
+  }, [silenceMs, clearSilenceTimer]);
 
   const start = useCallback(() => {
     const Ctor = getRecognitionCtor();
@@ -62,8 +86,6 @@ export function useSpeechRecognition(opts: {
       }
     }
     const rec = new Ctor();
-    // Default to Burmese since students speak mostly Burmese; the recognizer
-    // still handles mixed English words in the same utterance.
     rec.lang = lang ?? "my-MM";
     rec.continuous = true;
     rec.interimResults = true;
@@ -77,26 +99,36 @@ export function useSpeechRecognition(opts: {
       }
       if (interimText && onInterimRef.current) onInterimRef.current(interimText);
       if (finalText) onFinalRef.current(finalText.trim());
+      armSilenceTimer();
     };
-    rec.onerror = () => setListening(false);
-    rec.onend = () => setListening(false);
+    rec.onerror = () => {
+      clearSilenceTimer();
+      setListening(false);
+    };
+    rec.onend = () => {
+      clearSilenceTimer();
+      setListening(false);
+    };
     recRef.current = rec;
     try {
       rec.start();
       setListening(true);
+      armSilenceTimer();
     } catch {
       setListening(false);
     }
-  }, [lang]);
+  }, [lang, armSilenceTimer, clearSilenceTimer]);
 
   const stop = useCallback(() => {
+    clearSilenceTimer();
     try {
       recRef.current?.stop();
     } catch {
       // ignore
     }
     setListening(false);
-  }, []);
+  }, [clearSilenceTimer]);
+
 
   useEffect(() => () => stop(), [stop]);
 
