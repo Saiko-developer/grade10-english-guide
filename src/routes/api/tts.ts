@@ -48,12 +48,15 @@ export const Route = createFileRoute("/api/tts")({
           .replace(/```[\s\S]*?```/g, " ")   // fenced code blocks
           .replace(/`[^`]*`/g, " ")           // inline code
           .replace(/<[^>]+>/g, " ")           // any HTML/XML tag (incl. <br>, <voice_only>, etc.)
-          .replace(/\[(.*?)\]\(.*?\)/g, "$1") // markdown links
           .replace(/!\[.*?\]\(.*?\)/g, " ")   // markdown images
+          .replace(/\[(.*?)\]\(.*?\)/g, "$1") // markdown links
           .replace(/\|/g, " ")
-          .replace(/[*_#>~]/g, "")
+          .replace(/[*_#>~`]/g, "")           // stray markdown symbols
+          .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "") // control chars
           .replace(/\s+/g, " ")
           .trim();
+
+
 
         if (!clean) return new Response("empty text", { status: 400 });
 
