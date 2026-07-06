@@ -73,7 +73,7 @@ export const Route = createFileRoute("/api/tts")({
             method: "POST",
             headers: {
               "xi-api-key": key,
-              "Content-Type": "application/json",
+              "Content-Type": "application/json; charset=utf-8",
               Accept: "audio/mpeg",
             },
             body: JSON.stringify({
