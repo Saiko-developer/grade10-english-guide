@@ -282,7 +282,15 @@ function AnswerTryBox({
 /* ------------------------------------------------------------------ */
 
 function Section1A() {
-  const data = unit1.sections[0] as any; // 1A
+  const { unit, supplement } = useCurriculum();
+  const {
+    partA1A_translations,
+    partA1A_breakdowns,
+    partB1A_translations,
+    partB1A_breakdowns,
+    partC1A_translations,
+  } = supplement;
+  const data = unit.sections[0] as any; // 1A
   const passage = data.reading_passage;
   const comp = data.comprehension;
 
