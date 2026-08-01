@@ -462,7 +462,9 @@ function ExerciseGroup({
 /* ------------------------------------------------------------------ */
 
 function Section1B() {
-  const data = unit1.sections[1] as any; // 1B
+  const { unit, supplement } = useCurriculum();
+  const { vocab1B, partB1B_translations } = supplement;
+  const data = unit.sections[1] as any; // 1B
   const partB = data.part_B;
   const partA = data.part_A;
 
