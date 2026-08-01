@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, ChevronRight, GraduationCap, Library, MessageCircle, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { useI18n } from "@/lib/i18n";
-import unit1 from "@/data/textbookUnit1.json";
+import { useCurriculum } from "@/hooks/use-curriculum";
+import { DataSourceNotice } from "@/components/DataSourceNotice";
 
 
 const ICONS = [Library, BookOpen, Sparkles, GraduationCap];
