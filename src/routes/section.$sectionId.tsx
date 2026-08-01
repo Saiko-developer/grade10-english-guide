@@ -55,6 +55,12 @@ function SectionPage() {
     );
   }
 
+  return <SectionShell id={id} />;
+}
+
+function SectionShell({ id }: { id: SectionId }) {
+  const curriculum = useCurriculum();
+
   return (
     <div className="min-h-screen bg-[oklch(0.985_0.01_95)]">
       <SiteHeader />
@@ -65,6 +71,7 @@ function SectionPage() {
         >
           <ArrowLeft className="h-4 w-4" /> Back to lessons
         </Link>
+        <DataSourceNotice curriculum={curriculum} />
         {id === "1a" && <Section1A />}
         {id === "1b" && <Section1B />}
         {id === "1c" && <Section1C />}
