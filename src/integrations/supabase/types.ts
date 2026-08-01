@@ -14,7 +14,249 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      lesson_questions: {
+        Row: {
+          answer: string | null
+          created_at: string
+          id: number
+          kind: string
+          lesson_id: string | null
+          question: string
+          question_number: number
+          suggested_answer: string | null
+        }
+        Insert: {
+          answer?: string | null
+          created_at?: string
+          id?: number
+          kind?: string
+          lesson_id?: string | null
+          question: string
+          question_number: number
+          suggested_answer?: string | null
+        }
+        Update: {
+          answer?: string | null
+          created_at?: string
+          id?: number
+          kind?: string
+          lesson_id?: string | null
+          question?: string
+          question_number?: number
+          suggested_answer?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_questions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          intro: string | null
+          intro_my: string | null
+          sort_order: number
+          title: string
+          title_my: string | null
+          type: string | null
+          unit_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id: string
+          intro?: string | null
+          intro_my?: string | null
+          sort_order?: number
+          title: string
+          title_my?: string | null
+          type?: string | null
+          unit_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          intro?: string | null
+          intro_my?: string | null
+          sort_order?: number
+          title?: string
+          title_my?: string | null
+          type?: string | null
+          unit_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      section_exercises: {
+        Row: {
+          created_at: string
+          data: Json
+          headers: Json | null
+          id: number
+          instructions: string | null
+          part: string
+          section_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          headers?: Json | null
+          id?: number
+          instructions?: string | null
+          part: string
+          section_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          headers?: Json | null
+          id?: number
+          instructions?: string | null
+          part?: string
+          section_id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      section_passages: {
+        Row: {
+          content: Json
+          created_at: string
+          id: number
+          lesson: string | null
+          section_id: string
+          sort_order: number
+          topic: string | null
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          id?: number
+          lesson?: string | null
+          section_id: string
+          sort_order?: number
+          topic?: string | null
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: number
+          lesson?: string | null
+          section_id?: string
+          sort_order?: number
+          topic?: string | null
+        }
+        Relationships: []
+      }
+      supplements: {
+        Row: {
+          created_at: string
+          id: number
+          key: string
+          payload: Json
+          section_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          key: string
+          payload?: Json
+          section_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          key?: string
+          payload?: Json
+          section_id?: string
+        }
+        Relationships: []
+      }
+      units: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          title: string
+          title_my: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id: string
+          title: string
+          title_my?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          title?: string
+          title_my?: string | null
+        }
+        Relationships: []
+      }
+      vocabulary_items: {
+        Row: {
+          created_at: string
+          example_en: string | null
+          id: number
+          lesson_id: string | null
+          meaning_my: string | null
+          pronunciation: string | null
+          section_id: string | null
+          sort_order: number
+          word: string
+        }
+        Insert: {
+          created_at?: string
+          example_en?: string | null
+          id?: number
+          lesson_id?: string | null
+          meaning_my?: string | null
+          pronunciation?: string | null
+          section_id?: string | null
+          sort_order?: number
+          word: string
+        }
+        Update: {
+          created_at?: string
+          example_en?: string | null
+          id?: number
+          lesson_id?: string | null
+          meaning_my?: string | null
+          pronunciation?: string | null
+          section_id?: string | null
+          sort_order?: number
+          word?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vocabulary_items_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
