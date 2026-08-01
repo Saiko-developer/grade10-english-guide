@@ -574,7 +574,9 @@ function VocabCard({ item }: { item: { word: string; pronunciation: string; mean
 /* ------------------------------------------------------------------ */
 
 function Section1C() {
-  const data = unit1.sections[2] as any; // 1C
+  const { unit, supplement } = useCurriculum();
+  const { grammar1C, partA1C_translations } = supplement;
+  const data = unit.sections[2] as any; // 1C
   const partA = data.part_A;
 
   return (
