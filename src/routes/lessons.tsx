@@ -24,10 +24,13 @@ export const Route = createFileRoute("/lessons")({
 
 function LessonsPage() {
   const { t, lang } = useI18n();
+  const curriculum = useCurriculum();
+  const unit1 = curriculum.unit;
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-4 py-12">
+        <DataSourceNotice curriculum={curriculum} />
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <BookOpen className="h-4 w-4" /> {t("lessons.crumb")} · {unit1.unit}
         </div>
@@ -41,7 +44,7 @@ function LessonsPage() {
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {unit1.lessons.map((lesson, i) => {
+          {unit1.lessons.map((lesson: any, i: number) => {
             const Icon = ICONS[i % ICONS.length];
             const sectionId = lesson.code.toLowerCase();
             return (
