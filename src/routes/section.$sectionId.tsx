@@ -19,19 +19,9 @@ import tutorLogo from "@/assets/tutor-logo.png";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import unit1 from "@/data/textbookUnit1.json";
-import {
-  grammar1C,
-  partA1A_breakdowns,
-  partA1A_translations,
-  partA1C_translations,
-  partB1A_breakdowns,
-  partB1A_translations,
-  partB1B_translations,
-  partC1A_translations,
-  vocab1B,
-  type SentenceBreakdown,
-} from "@/data/unit1Supplement";
+import { DataSourceNotice } from "@/components/DataSourceNotice";
+import { useCurriculum } from "@/hooks/use-curriculum";
+import { type SentenceBreakdown } from "@/data/unit1Supplement";
 import { TAG_INFO } from "@/lib/sentenceStructure";
 import {
   Sheet,
@@ -65,6 +55,12 @@ function SectionPage() {
     );
   }
 
+  return <SectionShell id={id} />;
+}
+
+function SectionShell({ id }: { id: SectionId }) {
+  const curriculum = useCurriculum();
+
   return (
     <div className="min-h-screen bg-[oklch(0.985_0.01_95)]">
       <SiteHeader />
@@ -75,6 +71,7 @@ function SectionPage() {
         >
           <ArrowLeft className="h-4 w-4" /> Back to lessons
         </Link>
+        <DataSourceNotice curriculum={curriculum} />
         {id === "1a" && <Section1A />}
         {id === "1b" && <Section1B />}
         {id === "1c" && <Section1C />}
@@ -292,7 +289,15 @@ function AnswerTryBox({
 /* ------------------------------------------------------------------ */
 
 function Section1A() {
-  const data = unit1.sections[0] as any; // 1A
+  const { unit, supplement } = useCurriculum();
+  const {
+    partA1A_translations,
+    partA1A_breakdowns,
+    partB1A_translations,
+    partB1A_breakdowns,
+    partC1A_translations,
+  } = supplement;
+  const data = unit.sections[0] as any; // 1A
   const passage = data.reading_passage;
   const comp = data.comprehension;
 
@@ -472,7 +477,9 @@ function ExerciseGroup({
 /* ------------------------------------------------------------------ */
 
 function Section1B() {
-  const data = unit1.sections[1] as any; // 1B
+  const { unit, supplement } = useCurriculum();
+  const { vocab1B, partB1B_translations } = supplement;
+  const data = unit.sections[1] as any; // 1B
   const partB = data.part_B;
   const partA = data.part_A;
 
@@ -584,7 +591,9 @@ function VocabCard({ item }: { item: { word: string; pronunciation: string; mean
 /* ------------------------------------------------------------------ */
 
 function Section1C() {
-  const data = unit1.sections[2] as any; // 1C
+  const { unit, supplement } = useCurriculum();
+  const { grammar1C, partA1C_translations } = supplement;
+  const data = unit.sections[2] as any; // 1C
   const partA = data.part_A;
 
   return (

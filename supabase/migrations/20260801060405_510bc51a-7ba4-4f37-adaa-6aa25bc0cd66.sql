@@ -1,0 +1,1 @@
+DO $$ BEGIN IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname='sandbox_exec') THEN EXECUTE 'GRANT INSERT, UPDATE, DELETE, SELECT ON public.section_exercises TO sandbox_exec'; EXECUTE 'GRANT USAGE, SELECT ON SEQUENCE public.section_exercises_id_seq TO sandbox_exec'; END IF; END $$;
