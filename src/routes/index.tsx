@@ -42,14 +42,6 @@ const FEATURES = [
   { icon: Trophy, key: "practice" },
 ] as const;
 
-const LESSONS = [
-  { tag: "Grammar", title: "Present Perfect vs Past Simple", time: "8 min" },
-  { tag: "Vocabulary", title: "Linking words: however, despite, although", time: "6 min" },
-  { tag: "Writing", title: "Paragraph structure for essays", time: "10 min" },
-  { tag: "Reading", title: "Finding the main idea", time: "7 min" },
-  { tag: "Grammar", title: "Conditionals: zero, first, second, third", time: "12 min" },
-  { tag: "Speaking", title: "Common matric interview phrases", time: "5 min" },
-];
 
 function Landing() {
   const { t } = useI18n();
