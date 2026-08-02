@@ -553,6 +553,14 @@
               "a Japanese martial art",
               "a samurai unarmed fighting technique"
             ]
+          },
+          {
+            "question_number":10,
+            "text":"Albert Einstein ,the great physicist,was famous for his theory of relativity.",
+            "apposition_pharses":[
+              "Albert Einstein",
+              "the great physicist"
+            ]
           }
         ]
       }
