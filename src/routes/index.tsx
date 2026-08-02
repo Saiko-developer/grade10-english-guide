@@ -125,41 +125,29 @@ function Landing() {
         </div>
       </section>
 
-      {/* Lessons preview */}
+      {/* Syllabus Curriculum Explorer */}
       <section id="lessons" className="border-t border-border/60">
-        <div className="mx-auto max-w-6xl px-4 py-16">
+        <div className="mx-auto max-w-5xl px-4 py-16">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{t("lessons.popular")}</h2>
-              <p className="mt-2 text-muted-foreground">{t("lessons.popular.sub")}</p>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+                Syllabus Curriculum Explorer
+              </h2>
+              <p className="mt-2 text-muted-foreground">
+                Grade 10 English — Units 1 to 12. Open a unit to see every skill, then start a live
+                quiz.
+              </p>
             </div>
             <Link to="/lessons" className="hidden text-sm font-medium text-primary hover:underline sm:inline">
               {t("lessons.viewall")}
             </Link>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {LESSONS.map((l) => (
-              <Link
-                key={l.title}
-                to="/tutor"
-                className="group rounded-2xl border border-border bg-card p-5 transition hover:border-primary/40 hover:shadow-md"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-accent/30 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent-foreground">
-                    {l.tag}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{l.time}</span>
-                </div>
-                <h3 className="mt-3 text-base font-semibold group-hover:text-primary">{l.title}</h3>
-                <p className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
-                  <Lightbulb className="h-3.5 w-3.5" />
-                  {t("lessons.askToExplain")}
-                </p>
-              </Link>
-            ))}
+          <div className="mt-8">
+            <CurriculumExplorer />
           </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="border-t border-border/60 bg-primary/5">
