@@ -563,7 +563,63 @@
             ]
           }
         ]
+      },
+        "part_B": {
+    "instructions": "Combine the two sentences, using nouns in apposition.",
+    "exercises": [
+      {
+        "question_number": 1,
+        "text": "Myanmar is the second largest country in Southeast Asia. It is known as the land of pagodas.",
+        "correct_answer": "Myanmar, the second largest country in Southeast Asia, is known as the land of pagodas.",
+        "alternative_answer": "Myanmar, the land of pagodas, is the second largest country in Southeast Asia."
+      },
+      {
+        "question_number": 2,
+        "text": "U Tun Tun is our English teacher. He is a very strict person.",
+        "correct_answer": "U Tun Tun, our English teacher, is a very strict person."
+      },
+      {
+        "question_number": 3,
+        "text": "Aung Aung won many prizes. He is the best footballer in our school.",
+        "correct_answer": "Aung Aung, the best footballer in our school, won many prizes."
+      },
+      {
+        "question_number": 4,
+        "text": "An excuse may or may not be true. It is a reason for an apology.",
+        "correct_answer": "An excuse, a reason for an apology, may or may not be true."
+      },
+      {
+        "question_number": 5,
+        "text": "Jack was born in Finland. Finland is the land of a thousand lakes.",
+        "correct_answer": "Jack was born in Finland, the land of a thousand lakes."
+      },
+      {
+        "question_number": 6,
+        "text": "Elvis Presley was a very popular singer. He was referred to as the \"King of Rock and Roll\".",
+        "correct_answer": "Elvis Presley, a very popular singer, was referred to as the \"King of Rock and Roll\"."
+      },
+      {
+        "question_number": 7,
+        "text": "We will spend our vacation at Ngapali Beach. It is the most beautiful beach in our country.",
+        "correct_answer": "We will spend our vacation at Ngapali Beach, the most beautiful beach in our country."
+      },
+      {
+        "question_number": 8,
+        "text": "William Henry Gates was born in Washington. He is the principal founder of Microsoft.",
+        "correct_answer": "William Henry Gates, the principal founder of Microsoft, was born in Washington."
+      },
+      {
+        "question_number": 9,
+        "text": "I like spaghetti. It is an Italian dish with noodles and sauce.",
+        "correct_answer": "I like spaghetti, an Italian dish with noodles and sauce."
+      },
+      {
+        "question_number": 10,
+        "text": "My childhood home is just down the road. It is an old wooden house.",
+        "correct_answer": "My childhood home, an old wooden house, is just down the road."
       }
+    ]
+  }
     }
   ]
 }
