@@ -3,7 +3,7 @@ import {
   BookOpen,
   GraduationCap,
   Languages,
-  Lightbulb,
+  
   MessageCircle,
   Sparkles,
   Trophy,
