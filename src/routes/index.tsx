@@ -10,8 +10,10 @@ import {
 } from "lucide-react";
 
 import heroOwl from "@/assets/hero-owl.jpg";
+import { CurriculumExplorer } from "@/components/CurriculumExplorer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { useI18n } from "@/lib/i18n";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
