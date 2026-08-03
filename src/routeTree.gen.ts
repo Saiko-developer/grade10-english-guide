@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SectionSectionIdRouteImport } from './routes/section.$sectionId'
 import { Route as ApiTtsRouteImport } from './routes/api/tts'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as PracticeUnitSkillRouteImport } from './routes/practice.$unit.$skill'
 
 const TutorRoute = TutorRouteImport.update({
   id: '/tutor',
@@ -46,6 +47,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeUnitSkillRoute = PracticeUnitSkillRouteImport.update({
+  id: '/practice/$unit/$skill',
+  path: '/practice/$unit/$skill',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
+  '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
+  '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
+  '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/tts'
     | '/section/$sectionId'
+    | '/practice/$unit/$skill'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/tts'
     | '/section/$sectionId'
+    | '/practice/$unit/$skill'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/tts'
     | '/section/$sectionId'
+    | '/practice/$unit/$skill'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   ApiTtsRoute: typeof ApiTtsRoute
   SectionSectionIdRoute: typeof SectionSectionIdRoute
+  PracticeUnitSkillRoute: typeof PracticeUnitSkillRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice/$unit/$skill': {
+      id: '/practice/$unit/$skill'
+      path: '/practice/$unit/$skill'
+      fullPath: '/practice/$unit/$skill'
+      preLoaderRoute: typeof PracticeUnitSkillRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   ApiTtsRoute: ApiTtsRoute,
   SectionSectionIdRoute: SectionSectionIdRoute,
+  PracticeUnitSkillRoute: PracticeUnitSkillRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

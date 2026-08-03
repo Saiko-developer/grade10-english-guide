@@ -113,19 +113,9 @@ export function CurriculumExplorer() {
                         {group.kinds.map((kind) => {
                           const skill = node.skills.find((s) => s.kind === kind) as SyllabusSkill;
                           const Icon = SKILL_ICONS[kind];
-                          const interactive = Boolean(skill.quiz);
-                          return (
-                            <button
-                              key={kind}
-                              type="button"
-                              disabled={!interactive}
-                              onClick={() => interactive && setQuizOpen(true)}
-                              className={`group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition ${
-                                interactive
-                                  ? "cursor-pointer border-primary/40 bg-primary/5 hover:-translate-y-0.5 hover:shadow-md"
-                                  : "border-border bg-background hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm"
-                              }`}
-                            >
+                          const hasQuiz = Boolean(skill.quiz);
+                          const body = (
+                            <>
                               <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
                                 <Icon className="h-3.5 w-3.5" />
                               </span>
@@ -134,16 +124,42 @@ export function CurriculumExplorer() {
                                 <span className="block text-xs text-muted-foreground">
                                   {skill.detail}
                                 </span>
-                                {interactive && (
-                                  <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
-                                    <Play className="h-3 w-3" /> Start live quiz
-                                  </span>
-                                )}
+                                <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
+                                  <Play className="h-3 w-3" />
+                                  {hasQuiz ? "Start live quiz" : "Open practice"}
+                                </span>
                               </span>
-                            </button>
+                            </>
+                          );
+                          const className =
+                            "group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition cursor-pointer border-primary/40 bg-primary/5 hover:-translate-y-0.5 hover:shadow-md";
+
+                          if (hasQuiz) {
+                            return (
+                              <button
+                                key={kind}
+                                type="button"
+                                onClick={() => setQuizOpen(true)}
+                                className={className}
+                              >
+                                {body}
+                              </button>
+                            );
+                          }
+
+                          return (
+                            <Link
+                              key={kind}
+                              to="/practice/$unit/$skill"
+                              params={{ unit: String(node.number), skill: kind }}
+                              className={className}
+                            >
+                              {body}
+                            </Link>
                           );
                         })}
                       </div>
+
                     </div>
                   ))}
                 </div>
