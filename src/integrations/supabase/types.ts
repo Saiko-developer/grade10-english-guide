@@ -57,11 +57,13 @@ export type Database = {
       }
       lessons: {
         Row: {
+          audio_url: string | null
           code: string
           created_at: string
           id: string
           intro: string | null
           intro_my: string | null
+          skill: string | null
           sort_order: number
           title: string
           title_my: string | null
@@ -69,11 +71,13 @@ export type Database = {
           unit_id: string | null
         }
         Insert: {
+          audio_url?: string | null
           code: string
           created_at?: string
           id: string
           intro?: string | null
           intro_my?: string | null
+          skill?: string | null
           sort_order?: number
           title: string
           title_my?: string | null
@@ -81,11 +85,13 @@ export type Database = {
           unit_id?: string | null
         }
         Update: {
+          audio_url?: string | null
           code?: string
           created_at?: string
           id?: string
           intro?: string | null
           intro_my?: string | null
+          skill?: string | null
           sort_order?: number
           title?: string
           title_my?: string | null
