@@ -620,6 +620,93 @@
       }
     ]
   }
-    }
+    },
+    {
+    "id": "1d-listening-speaking",
+    "code": "1D",
+    "type": "Listening and Speaking",
+    "title": "Listening and Speaking",
+    "titleMy": "နားထောင်ခြင်းနှင့် ပြောဆိုခြင်း",
+    "intro": "Listen to the information about global languages and practice conversational interviewing skills with your partner.",
+    "introMy": "ကမ္ဘာ့ဘာသာစကားများအကြောင်းကို နားထောင်ပြီး သူငယ်ချင်းနှင့်အတူ အင်တာဗျူးမေးခွန်းများ မေးမြန်းပြောဆိုလေ့ကျင့်ပါ။",
+    "questions": [
+      {
+        "id": 1,
+        "question": "English is spoken by over __________ people in the world.",
+        "suggested_answer": "[Listen to audio for exact number]"
+      },
+      {
+        "id": 2,
+        "question": "__________ is the second most spoken language in the world.",
+        "suggested_answer": "[Listen to audio for exact language]"
+      },
+      {
+        "id": 3,
+        "question": "Hindi and Punjabi belong to the __________ language family.",
+        "suggested_answer": "Indo-Aryan / Indo-European"
+      },
+      {
+        "id": 4,
+        "question": "People in Spain and Central and South America speak __________.",
+        "suggested_answer": "Spanish"
+      },
+      {
+        "id": 5,
+        "question": "The number of people who speak __________ is more than that of Russian.",
+        "suggested_answer": "[Listen to audio for exact language]"
+      }
+    ],
+    "bonusQuestions": [
+      {
+        "id": 1,
+        "question": "Are you learning a foreign language? What is it?",
+        "answer": "Yes, I am learning English."
+      },
+      {
+        "id": 2,
+        "question": "What difficulties do you have in learning a foreign language?",
+        "answer": "I have difficulties with vocabulary, grammar rules, and correct pronunciation."
+      },
+      {
+        "id": 3,
+        "question": "How do you study that language outside school?",
+        "answer": "I practice by watching English movies, listening to songs, and reading storybooks."
+      },
+      {
+        "id": 4,
+        "question": "What words or phrases would you use to express thanks?",
+        "answer": "I would use phrases like 'Thank you very much', 'Thanks a lot', or 'I really appreciate it'."
+      }
+    ]
+  },
+  {
+    "id": "1e-writing",
+    "code": "1E",
+    "type": "Writing",
+    "title": "Writing: Essay on Japan",
+    "titleMy": "စာရေးသားခြင်း - ဂျပန်နိုင်ငံအကြောင်း စာပိုဒ်တိုရေးသားခြင်း",
+    "intro": "Write a short paragraph of seven to ten sentences on Japan using the suggested key points.",
+    "introMy": "ပေးထားသော အချက်အလက်များကို အသုံးပြု၍ ဂျပန်နိုင်ငံအကြောင်း စာကြောင်းရေ ၇ ကြောင်းမှ ၁၀ ကြောင်းပါ စာပိုဒ်တိုတစ်ခု ရေးသားပါ။",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Write a short paragraph about Japan using the suggested points (island nation, Pacific Ocean, advanced country, exports, etc.).",
+        "suggested_answer": "Japan is an island nation located in the north Pacific Ocean, just off the coast of the Asian continent. The people of Japan speak Japanese, which is their official language. It is known worldwide as a very advanced country with a strong economy. Japan is famous for its technology and high-quality production. The country manufactures and exports millions of cars, advanced cameras, and televisions to many global markets. Through hard work and innovation, Japan has become one of the most developed nations in the world."
+      }
+    ],
+    "bonusQuestions": [
+      {
+        "id": 1,
+        "question": "Where is Japan located?",
+        "answer": "It is located in the north Pacific Ocean, off the coast of the Asian continent."
+      },
+      {
+        "id": 2,
+        "question": "What are the major manufacturing exports of Japan?",
+        "answer": "Japan manufactures and exports cars, cameras, and televisions."
+      }
+    ]
+  }
+    
   ]
 }
