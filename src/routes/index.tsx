@@ -121,15 +121,15 @@ function Landing() {
 
       {/* Syllabus Curriculum Explorer */}
       <section id="lessons" className="border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-4 py-16">
+        <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="flex items-end justify-between gap-4">
             <div>
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
                 Syllabus Curriculum Explorer
               </h2>
               <p className="mt-2 text-muted-foreground">
-                Grade 10 English — Units 1 to 12. Open a unit to see every skill, then start a live
-                quiz.
+                Grade 10 English — Units 1 to 12. Open a unit and tap any skill card to start
+                learning.
               </p>
             </div>
             <Link to="/lessons" className="hidden text-sm font-medium text-primary hover:underline sm:inline">

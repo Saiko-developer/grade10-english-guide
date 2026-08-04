@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
 
 import {
   BookOpen,
@@ -7,14 +6,14 @@ import {
   Headphones,
   MessageSquare,
   PenLine,
-  Play,
   SpellCheck,
   Sparkles,
   Type,
 } from "lucide-react";
 
-import { AppositionQuiz } from "@/components/AppositionQuiz";
+import { PracticeWorkspace } from "@/components/PracticeWorkspace";
 import { SYLLABUS, type SkillKind, type SyllabusSkill } from "@/data/syllabus";
+import type { PracticeSkill } from "@/lib/practice";
 
 const SKILL_ICONS: Record<SkillKind, typeof BookOpen> = {
   listening: Headphones,
@@ -35,9 +34,23 @@ const GROUPS: { title: string; hint: string; kinds: SkillKind[] }[] = [
   },
 ];
 
+type Selection = { unit: number; skill: PracticeSkill };
+
 export function CurriculumExplorer() {
   const [openUnit, setOpenUnit] = useState<number | null>(1);
-  const [quizOpen, setQuizOpen] = useState(false);
+  const [selection, setSelection] = useState<Selection | null>(null);
+
+  // Active selection state — the grid is replaced by the split-screen workspace.
+  if (selection) {
+    return (
+      <PracticeWorkspace
+        unit={String(selection.unit)}
+        skill={selection.skill}
+        onBack={() => setSelection(null)}
+        backLabel="Back to lessons"
+      />
+    );
+  }
 
   return (
     <div className="space-y-3">
@@ -72,13 +85,11 @@ export function CurriculumExplorer() {
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpenUnit(isOpen ? null : node.number)}
-              className="flex w-full items-center gap-4 px-5 py-4 text-left"
+              className="flex w-full cursor-pointer items-center gap-4 px-5 py-4 text-left"
             >
               <span
                 className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold transition ${
-                  isOpen
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-primary/10 text-primary"
+                  isOpen ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"
                 }`}
               >
                 {node.number}
@@ -115,9 +126,15 @@ export function CurriculumExplorer() {
                         {group.kinds.map((kind) => {
                           const skill = node.skills.find((s) => s.kind === kind) as SyllabusSkill;
                           const Icon = SKILL_ICONS[kind];
-                          const hasQuiz = Boolean(skill.quiz);
-                          const body = (
-                            <>
+                          return (
+                            <button
+                              key={kind}
+                              type="button"
+                              onClick={() =>
+                                setSelection({ unit: node.number, skill: kind as PracticeSkill })
+                              }
+                              className="group flex w-full cursor-pointer items-start gap-3 rounded-xl border border-primary/40 bg-primary/5 p-3 text-left transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:shadow-md"
+                            >
                               <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
                                 <Icon className="h-3.5 w-3.5" />
                               </span>
@@ -126,42 +143,11 @@ export function CurriculumExplorer() {
                                 <span className="block text-xs text-muted-foreground">
                                   {skill.detail}
                                 </span>
-                                <span className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
-                                  <Play className="h-3 w-3" />
-                                  {hasQuiz ? "Start live quiz" : "Open practice"}
-                                </span>
                               </span>
-                            </>
-                          );
-                          const className =
-                            "group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition cursor-pointer border-primary/40 bg-primary/5 hover:-translate-y-0.5 hover:shadow-md";
-
-                          if (hasQuiz) {
-                            return (
-                              <button
-                                key={kind}
-                                type="button"
-                                onClick={() => setQuizOpen(true)}
-                                className={className}
-                              >
-                                {body}
-                              </button>
-                            );
-                          }
-
-                          return (
-                            <Link
-                              key={kind}
-                              to="/practice/$unit/$skill"
-                              params={{ unit: String(node.number), skill: kind }}
-                              className={className}
-                            >
-                              {body}
-                            </Link>
+                            </button>
                           );
                         })}
                       </div>
-
                     </div>
                   ))}
                 </div>
@@ -170,8 +156,6 @@ export function CurriculumExplorer() {
           </div>
         );
       })}
-
-      <AppositionQuiz open={quizOpen} onOpenChange={setQuizOpen} />
     </div>
   );
 }
