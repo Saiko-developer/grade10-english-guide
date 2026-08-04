@@ -110,3 +110,72 @@ export async function fetchPracticeLesson(
     bonusQuestions: map("bonus"),
   };
 }
+
+/* ------------------------------------------------------------------ */
+/* Source material for the left column of the split-screen workspace   */
+/* ------------------------------------------------------------------ */
+
+export type PassageParagraph = { english: string; burmese: string | null };
+
+export type VocabEntry = {
+  word: string;
+  pronunciation: string | null;
+  meaningMy: string | null;
+  exampleEn: string | null;
+};
+
+export type GrammarNote = {
+  whatMy?: string;
+  whyMy?: string;
+  whenMy?: string;
+  examples?: { en: string; my?: string }[];
+};
+
+export type LessonMaterial = {
+  passageTitle: string | null;
+  paragraphs: PassageParagraph[];
+  vocabulary: VocabEntry[];
+  grammar: GrammarNote | null;
+};
+
+/** Reads the passage / vocabulary / grammar source content for a lesson code (e.g. "1A"). */
+export async function fetchLessonMaterial(code: string): Promise<LessonMaterial> {
+  const sectionId = code.toLowerCase();
+
+  const [passageRes, vocabRes, grammarRes] = await Promise.all([
+    supabase.from("section_passages").select("content").eq("section_id", sectionId).maybeSingle(),
+    supabase
+      .from("vocabulary_items")
+      .select("word, pronunciation, meaning_my, example_en")
+      .eq("section_id", sectionId)
+      .order("sort_order"),
+    supabase
+      .from("supplements")
+      .select("payload")
+      .eq("section_id", sectionId)
+      .like("key", "grammar%")
+      .maybeSingle(),
+  ]);
+
+  const content = (passageRes.data?.content ?? {}) as {
+    reading_passage?: {
+      title?: string;
+      paragraphs?: { english_text?: string; burmese_explanation?: string }[];
+    };
+  };
+
+  return {
+    passageTitle: content.reading_passage?.title ?? null,
+    paragraphs: (content.reading_passage?.paragraphs ?? []).map((p) => ({
+      english: p.english_text ?? "",
+      burmese: p.burmese_explanation ?? null,
+    })),
+    vocabulary: (vocabRes.data ?? []).map((v) => ({
+      word: v.word,
+      pronunciation: v.pronunciation,
+      meaningMy: v.meaning_my,
+      exampleEn: v.example_en,
+    })),
+    grammar: (grammarRes.data?.payload as GrammarNote | undefined) ?? null,
+  };
+}
