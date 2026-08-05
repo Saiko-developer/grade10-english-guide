@@ -467,6 +467,7 @@ export type Database = {
       }
       units: {
         Row: {
+          audio_url: string | null
           code: string
           created_at: string
           id: string
@@ -475,6 +476,7 @@ export type Database = {
           title_my: string | null
         }
         Insert: {
+          audio_url?: string | null
           code: string
           created_at?: string
           id: string
@@ -483,6 +485,7 @@ export type Database = {
           title_my?: string | null
         }
         Update: {
+          audio_url?: string | null
           code?: string
           created_at?: string
           id?: string
