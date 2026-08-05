@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SectionSectionIdRouteImport } from './routes/section.$sectionId'
 import { Route as ApiTtsRouteImport } from './routes/api/tts'
 import { Route as ApiExercisesRouteImport } from './routes/api/exercises'
+import { Route as ApiExamRouteImport } from './routes/api/exam'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as PracticeUnitSkillRouteImport } from './routes/practice.$unit.$skill'
 
@@ -54,6 +55,11 @@ const ApiExercisesRoute = ApiExercisesRouteImport.update({
   path: '/api/exercises',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiExamRoute = ApiExamRouteImport.update({
+  id: '/api/exam',
+  path: '/api/exam',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exam': typeof ApiExamRoute
   '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exam': typeof ApiExamRoute
   '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exam': typeof ApiExamRoute
   '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exam'
     | '/api/exercises'
     | '/api/tts'
     | '/section/$sectionId'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exam'
     | '/api/exercises'
     | '/api/tts'
     | '/section/$sectionId'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exam'
     | '/api/exercises'
     | '/api/tts'
     | '/section/$sectionId'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   LessonsRoute: typeof LessonsRoute
   TutorRoute: typeof TutorRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiExamRoute: typeof ApiExamRoute
   ApiExercisesRoute: typeof ApiExercisesRoute
   ApiTtsRoute: typeof ApiTtsRoute
   SectionSectionIdRoute: typeof SectionSectionIdRoute
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiExercisesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/exam': {
+      id: '/api/exam'
+      path: '/api/exam'
+      fullPath: '/api/exam'
+      preLoaderRoute: typeof ApiExamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   LessonsRoute: LessonsRoute,
   TutorRoute: TutorRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiExamRoute: ApiExamRoute,
   ApiExercisesRoute: ApiExercisesRoute,
   ApiTtsRoute: ApiTtsRoute,
   SectionSectionIdRoute: SectionSectionIdRoute,
