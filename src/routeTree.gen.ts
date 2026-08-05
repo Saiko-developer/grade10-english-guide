@@ -14,6 +14,7 @@ import { Route as LessonsRouteImport } from './routes/lessons'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SectionSectionIdRouteImport } from './routes/section.$sectionId'
+import { Route as PracticeUnitRouteImport } from './routes/practice.$unit'
 import { Route as ApiTtsRouteImport } from './routes/api/tts'
 import { Route as ApiExercisesRouteImport } from './routes/api/exercises'
 import { Route as ApiExamRouteImport } from './routes/api/exam'
@@ -45,6 +46,11 @@ const SectionSectionIdRoute = SectionSectionIdRouteImport.update({
   path: '/section/$sectionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeUnitRoute = PracticeUnitRouteImport.update({
+  id: '/practice/$unit',
+  path: '/practice/$unit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTtsRoute = ApiTtsRouteImport.update({
   id: '/api/tts',
   path: '/api/tts',
@@ -66,9 +72,9 @@ const ApiChatRoute = ApiChatRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PracticeUnitSkillRoute = PracticeUnitSkillRouteImport.update({
-  id: '/practice/$unit/$skill',
-  path: '/practice/$unit/$skill',
-  getParentRoute: () => rootRouteImport,
+  id: '/$skill',
+  path: '/$skill',
+  getParentRoute: () => PracticeUnitRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/api/exam': typeof ApiExamRoute
   '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
+  '/practice/$unit': typeof PracticeUnitRouteWithChildren
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/api/exam': typeof ApiExamRoute
   '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
+  '/practice/$unit': typeof PracticeUnitRouteWithChildren
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/api/exam': typeof ApiExamRoute
   '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
+  '/practice/$unit': typeof PracticeUnitRouteWithChildren
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/api/exam'
     | '/api/exercises'
     | '/api/tts'
+    | '/practice/$unit'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/api/exam'
     | '/api/exercises'
     | '/api/tts'
+    | '/practice/$unit'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/api/exam'
     | '/api/exercises'
     | '/api/tts'
+    | '/practice/$unit'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
   fileRoutesById: FileRoutesById
@@ -156,8 +168,8 @@ export interface RootRouteChildren {
   ApiExamRoute: typeof ApiExamRoute
   ApiExercisesRoute: typeof ApiExercisesRoute
   ApiTtsRoute: typeof ApiTtsRoute
+  PracticeUnitRoute: typeof PracticeUnitRouteWithChildren
   SectionSectionIdRoute: typeof SectionSectionIdRoute
-  PracticeUnitSkillRoute: typeof PracticeUnitSkillRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -197,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SectionSectionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice/$unit': {
+      id: '/practice/$unit'
+      path: '/practice/$unit'
+      fullPath: '/practice/$unit'
+      preLoaderRoute: typeof PracticeUnitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/tts': {
       id: '/api/tts'
       path: '/api/tts'
@@ -227,13 +246,25 @@ declare module '@tanstack/react-router' {
     }
     '/practice/$unit/$skill': {
       id: '/practice/$unit/$skill'
-      path: '/practice/$unit/$skill'
+      path: '/$skill'
       fullPath: '/practice/$unit/$skill'
       preLoaderRoute: typeof PracticeUnitSkillRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PracticeUnitRoute
     }
   }
 }
+
+interface PracticeUnitRouteChildren {
+  PracticeUnitSkillRoute: typeof PracticeUnitSkillRoute
+}
+
+const PracticeUnitRouteChildren: PracticeUnitRouteChildren = {
+  PracticeUnitSkillRoute: PracticeUnitSkillRoute,
+}
+
+const PracticeUnitRouteWithChildren = PracticeUnitRoute._addFileChildren(
+  PracticeUnitRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -244,8 +275,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiExamRoute: ApiExamRoute,
   ApiExercisesRoute: ApiExercisesRoute,
   ApiTtsRoute: ApiTtsRoute,
+  PracticeUnitRoute: PracticeUnitRouteWithChildren,
   SectionSectionIdRoute: SectionSectionIdRoute,
-  PracticeUnitSkillRoute: PracticeUnitSkillRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
