@@ -14,6 +14,136 @@ export type Database = {
   }
   public: {
     Tables: {
+      exam_upload_questions: {
+        Row: {
+          answer: string
+          created_at: string
+          explanation_my: string | null
+          id: string
+          kind: string
+          options: Json
+          prompt: string
+          sort_order: number
+          upload_id: string
+          user_id: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          explanation_my?: string | null
+          id?: string
+          kind?: string
+          options?: Json
+          prompt: string
+          sort_order?: number
+          upload_id: string
+          user_id: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          explanation_my?: string | null
+          id?: string
+          kind?: string
+          options?: Json
+          prompt?: string
+          sort_order?: number
+          upload_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_upload_questions_upload_id_fkey"
+            columns: ["upload_id"]
+            isOneToOne: false
+            referencedRelation: "exam_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_uploads: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          extracted_text: string | null
+          file_name: string
+          file_path: string
+          id: string
+          mime_type: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          extracted_text?: string | null
+          file_name: string
+          file_path: string
+          id?: string
+          mime_type?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          extracted_text?: string | null
+          file_name?: string
+          file_path?: string
+          id?: string
+          mime_type?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      grammar_lessons: {
+        Row: {
+          created_at: string
+          examples: Json
+          id: string
+          rule_my: string | null
+          sort_order: number
+          title: string
+          title_my: string | null
+          topic: string
+          unit_id: string
+        }
+        Insert: {
+          created_at?: string
+          examples?: Json
+          id: string
+          rule_my?: string | null
+          sort_order?: number
+          title: string
+          title_my?: string | null
+          topic: string
+          unit_id: string
+        }
+        Update: {
+          created_at?: string
+          examples?: Json
+          id?: string
+          rule_my?: string | null
+          sort_order?: number
+          title?: string
+          title_my?: string | null
+          topic?: string
+          unit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grammar_lessons_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lesson_questions: {
         Row: {
           answer: string | null
@@ -108,6 +238,108 @@ export type Database = {
           },
         ]
       }
+      monthly_exams: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          questions: Json
+          score: number | null
+          status: string
+          title: string
+          total: number | null
+          unit_ids: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          questions?: Json
+          score?: number | null
+          status?: string
+          title: string
+          total?: number | null
+          unit_ids?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          questions?: Json
+          score?: number | null
+          status?: string
+          title?: string
+          total?: number | null
+          unit_ids?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      practice_progress: {
+        Row: {
+          completed_at: string
+          created_at: string
+          grammar_lesson_id: string | null
+          id: string
+          score: number
+          source: string
+          total: number
+          unit_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          grammar_lesson_id?: string | null
+          id?: string
+          score?: number
+          source?: string
+          total?: number
+          unit_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          grammar_lesson_id?: string | null
+          id?: string
+          score?: number
+          source?: string
+          total?: number
+          unit_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       section_exercises: {
         Row: {
           created_at: string
@@ -195,11 +427,50 @@ export type Database = {
         }
         Relationships: []
       }
+      unit_skills: {
+        Row: {
+          created_at: string
+          detail: string
+          id: number
+          kind: string
+          label: string
+          sort_order: number
+          unit_id: string
+        }
+        Insert: {
+          created_at?: string
+          detail: string
+          id?: number
+          kind: string
+          label: string
+          sort_order?: number
+          unit_id: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string
+          id?: number
+          kind?: string
+          label?: string
+          sort_order?: number
+          unit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "unit_skills_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       units: {
         Row: {
           code: string
           created_at: string
           id: string
+          sort_order: number
           title: string
           title_my: string | null
         }
@@ -207,6 +478,7 @@ export type Database = {
           code: string
           created_at?: string
           id: string
+          sort_order?: number
           title: string
           title_my?: string | null
         }
@@ -214,6 +486,7 @@ export type Database = {
           code?: string
           created_at?: string
           id?: string
+          sort_order?: number
           title?: string
           title_my?: string | null
         }
