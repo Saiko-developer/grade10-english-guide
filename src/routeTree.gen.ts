@@ -11,9 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TutorRouteImport } from './routes/tutor'
 import { Route as LessonsRouteImport } from './routes/lessons'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SectionSectionIdRouteImport } from './routes/section.$sectionId'
+import { Route as PracticeUnitRouteImport } from './routes/practice.$unit'
 import { Route as ApiTtsRouteImport } from './routes/api/tts'
+import { Route as ApiExercisesRouteImport } from './routes/api/exercises'
+import { Route as ApiExamRouteImport } from './routes/api/exam'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as PracticeUnitSkillRouteImport } from './routes/practice.$unit.$skill'
 
@@ -27,6 +31,11 @@ const LessonsRoute = LessonsRouteImport.update({
   path: '/lessons',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,9 +46,24 @@ const SectionSectionIdRoute = SectionSectionIdRouteImport.update({
   path: '/section/$sectionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeUnitRoute = PracticeUnitRouteImport.update({
+  id: '/practice/$unit',
+  path: '/practice/$unit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTtsRoute = ApiTtsRouteImport.update({
   id: '/api/tts',
   path: '/api/tts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExercisesRoute = ApiExercisesRouteImport.update({
+  id: '/api/exercises',
+  path: '/api/exercises',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiExamRoute = ApiExamRouteImport.update({
+  id: '/api/exam',
+  path: '/api/exam',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -48,36 +72,48 @@ const ApiChatRoute = ApiChatRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PracticeUnitSkillRoute = PracticeUnitSkillRouteImport.update({
-  id: '/practice/$unit/$skill',
-  path: '/practice/$unit/$skill',
-  getParentRoute: () => rootRouteImport,
+  id: '/$skill',
+  path: '/$skill',
+  getParentRoute: () => PracticeUnitRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exam': typeof ApiExamRoute
+  '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
+  '/practice/$unit': typeof PracticeUnitRouteWithChildren
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exam': typeof ApiExamRoute
+  '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
+  '/practice/$unit': typeof PracticeUnitRouteWithChildren
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exam': typeof ApiExamRoute
+  '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
+  '/practice/$unit': typeof PracticeUnitRouteWithChildren
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
 }
@@ -85,40 +121,55 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exam'
+    | '/api/exercises'
     | '/api/tts'
+    | '/practice/$unit'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exam'
+    | '/api/exercises'
     | '/api/tts'
+    | '/practice/$unit'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exam'
+    | '/api/exercises'
     | '/api/tts'
+    | '/practice/$unit'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   LessonsRoute: typeof LessonsRoute
   TutorRoute: typeof TutorRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiExamRoute: typeof ApiExamRoute
+  ApiExercisesRoute: typeof ApiExercisesRoute
   ApiTtsRoute: typeof ApiTtsRoute
+  PracticeUnitRoute: typeof PracticeUnitRouteWithChildren
   SectionSectionIdRoute: typeof SectionSectionIdRoute
-  PracticeUnitSkillRoute: typeof PracticeUnitSkillRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -137,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -151,11 +209,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SectionSectionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice/$unit': {
+      id: '/practice/$unit'
+      path: '/practice/$unit'
+      fullPath: '/practice/$unit'
+      preLoaderRoute: typeof PracticeUnitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/tts': {
       id: '/api/tts'
       path: '/api/tts'
       fullPath: '/api/tts'
       preLoaderRoute: typeof ApiTtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/exercises': {
+      id: '/api/exercises'
+      path: '/api/exercises'
+      fullPath: '/api/exercises'
+      preLoaderRoute: typeof ApiExercisesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/exam': {
+      id: '/api/exam'
+      path: '/api/exam'
+      fullPath: '/api/exam'
+      preLoaderRoute: typeof ApiExamRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
@@ -167,33 +246,38 @@ declare module '@tanstack/react-router' {
     }
     '/practice/$unit/$skill': {
       id: '/practice/$unit/$skill'
-      path: '/practice/$unit/$skill'
+      path: '/$skill'
       fullPath: '/practice/$unit/$skill'
       preLoaderRoute: typeof PracticeUnitSkillRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PracticeUnitRoute
     }
   }
 }
 
+interface PracticeUnitRouteChildren {
+  PracticeUnitSkillRoute: typeof PracticeUnitSkillRoute
+}
+
+const PracticeUnitRouteChildren: PracticeUnitRouteChildren = {
+  PracticeUnitSkillRoute: PracticeUnitSkillRoute,
+}
+
+const PracticeUnitRouteWithChildren = PracticeUnitRoute._addFileChildren(
+  PracticeUnitRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   LessonsRoute: LessonsRoute,
   TutorRoute: TutorRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiExamRoute: ApiExamRoute,
+  ApiExercisesRoute: ApiExercisesRoute,
   ApiTtsRoute: ApiTtsRoute,
+  PracticeUnitRoute: PracticeUnitRouteWithChildren,
   SectionSectionIdRoute: SectionSectionIdRoute,
-  PracticeUnitSkillRoute: PracticeUnitSkillRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
