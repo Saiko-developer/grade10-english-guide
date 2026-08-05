@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SectionSectionIdRouteImport } from './routes/section.$sectionId'
 import { Route as ApiTtsRouteImport } from './routes/api/tts'
+import { Route as ApiExercisesRouteImport } from './routes/api/exercises'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as PracticeUnitSkillRouteImport } from './routes/practice.$unit.$skill'
 
@@ -48,6 +49,11 @@ const ApiTtsRoute = ApiTtsRouteImport.update({
   path: '/api/tts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiExercisesRoute = ApiExercisesRouteImport.update({
+  id: '/api/exercises',
+  path: '/api/exercises',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/lessons': typeof LessonsRoute
   '/tutor': typeof TutorRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/exercises': typeof ApiExercisesRoute
   '/api/tts': typeof ApiTtsRoute
   '/section/$sectionId': typeof SectionSectionIdRoute
   '/practice/$unit/$skill': typeof PracticeUnitSkillRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exercises'
     | '/api/tts'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exercises'
     | '/api/tts'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/tutor'
     | '/api/chat'
+    | '/api/exercises'
     | '/api/tts'
     | '/section/$sectionId'
     | '/practice/$unit/$skill'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   LessonsRoute: typeof LessonsRoute
   TutorRoute: typeof TutorRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiExercisesRoute: typeof ApiExercisesRoute
   ApiTtsRoute: typeof ApiTtsRoute
   SectionSectionIdRoute: typeof SectionSectionIdRoute
   PracticeUnitSkillRoute: typeof PracticeUnitSkillRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/exercises': {
+      id: '/api/exercises'
+      path: '/api/exercises'
+      fullPath: '/api/exercises'
+      preLoaderRoute: typeof ApiExercisesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   LessonsRoute: LessonsRoute,
   TutorRoute: TutorRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiExercisesRoute: ApiExercisesRoute,
   ApiTtsRoute: ApiTtsRoute,
   SectionSectionIdRoute: SectionSectionIdRoute,
   PracticeUnitSkillRoute: PracticeUnitSkillRoute,
