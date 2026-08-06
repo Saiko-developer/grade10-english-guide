@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { sanitizeForSpeech } from "@/lib/sanitizeSpeech";
+
+
+
 type TtsBody = {
   text?: string;
   voice?: string;
@@ -44,17 +48,8 @@ export const Route = createFileRoute("/api/tts")({
         // Strip markdown / structure noise but preserve Burmese script and English words.
         // Strip ALL markdown + any leftover HTML/XML tags before sending to ElevenLabs.
         // Multilingual v2 gets confused by raw tags/markdown and can produce garbled output.
-        const clean = text
-          .replace(/```[\s\S]*?```/g, " ")   // fenced code blocks
-          .replace(/`[^`]*`/g, " ")           // inline code
-          .replace(/<[^>]+>/g, " ")           // any HTML/XML tag (incl. <br>, <voice_only>, etc.)
-          .replace(/!\[.*?\]\(.*?\)/g, " ")   // markdown images
-          .replace(/\[(.*?)\]\(.*?\)/g, "$1") // markdown links
-          .replace(/\|/g, " ")
-          .replace(/[*_#>~`]/g, "")           // stray markdown symbols
-          .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "") // control chars
-          .replace(/\s+/g, " ")
-          .trim();
+        const clean = sanitizeForSpeech(text);
+
 
 
 
@@ -107,9 +102,10 @@ export const Route = createFileRoute("/api/tts")({
         } catch (err) {
           // 2) Automatic fallback to OpenAI TTS via Lovable AI Gateway.
           console.warn(
-            "ElevenLabs failed or quota exceeded. Switching to OpenAI backup system...",
+            "ElevenLabs unsupported language script - falling back to OpenAI TTS",
             err instanceof Error ? err.message : err,
           );
+
 
           const lovableKey = process.env.LOVABLE_API_KEY;
           if (!lovableKey) {
