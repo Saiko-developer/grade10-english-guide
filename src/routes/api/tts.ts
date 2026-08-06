@@ -102,9 +102,10 @@ export const Route = createFileRoute("/api/tts")({
         } catch (err) {
           // 2) Automatic fallback to OpenAI TTS via Lovable AI Gateway.
           console.warn(
-            "ElevenLabs failed or quota exceeded. Switching to OpenAI backup system...",
+            "ElevenLabs unsupported language script - falling back to OpenAI TTS",
             err instanceof Error ? err.message : err,
           );
+
 
           const lovableKey = process.env.LOVABLE_API_KEY;
           if (!lovableKey) {
