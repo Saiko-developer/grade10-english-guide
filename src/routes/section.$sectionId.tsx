@@ -1,35 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  ArrowLeft,
-  BookOpen,
-  CheckCircle2,
-  ChevronRight,
-  Eye,
-  EyeOff,
-  Languages,
-  Lightbulb,
-  ListChecks,
-  Play,
-  Sparkles,
-  Volume2,
-} from "lucide-react";
+import { ArrowLeft, BookOpen, ChevronRight, Languages, ListChecks, Play } from "lucide-react";
 
-import tutorLogo from "@/assets/tutor-logo.png";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { DataSourceNotice } from "@/components/DataSourceNotice";
 import { useCurriculum } from "@/hooks/use-curriculum";
-import { type SentenceBreakdown } from "@/data/unit1Supplement";
-import { TAG_INFO } from "@/lib/sentenceStructure";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  AnswerTryBox,
+  ExerciseGroup,
+  OwlBadge,
+  ParagraphBlock,
+  ToggleReveal,
+  VocabCard,
+} from "@/components/lesson/ExerciseKit";
+
 
 type SectionId = "1a" | "1b" | "1c";
 
